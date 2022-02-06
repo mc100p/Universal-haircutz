@@ -14,6 +14,8 @@ class ThemeProvider extends ChangeNotifier {
 
 class MyThemes {
   static final darkTheme = ThemeData(
+    inputDecorationTheme:
+        InputDecorationTheme(labelStyle: TextStyle(color: Colors.grey)),
     scaffoldBackgroundColor: Colors.grey.shade900,
     colorScheme: ColorScheme.dark(
       primary: Color(0xFFFC9900),
@@ -51,6 +53,8 @@ class MyThemes {
   );
 
   static final lightTheme = ThemeData(
+    inputDecorationTheme:
+        InputDecorationTheme(labelStyle: TextStyle(color: Colors.grey)),
     scaffoldBackgroundColor: Color(0xFFF4F7FA),
     colorScheme: ColorScheme.light(
       primary: Color(0xFFFC9900),

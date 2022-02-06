@@ -82,10 +82,8 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
                           width: 1.0,
                         ),
                       ),
-
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.10),
-                      // SizedBox(height: MediaQuery.of(context).size.height / 3),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 10,
                         width: MediaQuery.of(context).size.width - 50,

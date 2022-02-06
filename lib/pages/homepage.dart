@@ -32,8 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      extendBodyBehindAppBar: true,
-      extendBody: true,
+      // extendBodyBehindAppBar: true,
+      // extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -72,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding: const EdgeInsets.symmetric(horizontal: 15.0),
                         child: Column(
                           children: [
-                            SizedBox(height: size.height * 0.15),
                             Column(
                               children: [
                                 Row(
@@ -109,30 +108,42 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     SliverGrid.count(
                       crossAxisCount: 2,
-                      mainAxisSpacing: 15.0,
-                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 15,
                       children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.yellow,
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.yellow,
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.yellow,
-                        ),
-                        Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.yellow,
-                        )
+                        containerService('images/razor.png', 'Shaving'),
+                        containerService(
+                            'images/blow-dryer.png', 'Hair warming'),
+                        containerService('images/shower.png', 'Hair Care'),
+                        containerService(
+                            'images/beard-trimming.png', 'Beard Triming'),
                       ],
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(top: 20),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height / 10,
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            color: Theme.of(context).cardColor,
+                            onPressed: () {},
+                            child: Text(
+                              'Reservation Now',
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     SliverPadding(
                       padding: const EdgeInsets.only(top: 50),
@@ -145,6 +156,35 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
         },
+      ),
+    );
+  }
+
+  Widget containerService(String image, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        height: 20,
+        width: 20,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: AssetImage('$image'),
+              height: 80,
+              width: 80,
+            ),
+            SizedBox(height: 20),
+            Text(
+              '$text',
+              style: TextStyle(color: Colors.grey, fontSize: 18.0),
+            ),
+          ],
+        ),
       ),
     );
   }
