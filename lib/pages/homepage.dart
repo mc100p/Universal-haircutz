@@ -111,7 +111,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 15,
                       children: [
-                        containerService('images/razor.png', 'Shaving'),
+                        InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/shaving'),
+                            child: containerService(
+                                'images/razor.png', 'Shaving')),
                         containerService(
                             'images/blow-dryer.png', 'Hair warming'),
                         containerService('images/shower.png', 'Hair Care'),

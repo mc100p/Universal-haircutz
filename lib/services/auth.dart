@@ -178,7 +178,7 @@ class AuthService {
                   '/userHomePage', (Route<dynamic> route) => false);
             } else if (role == 'Admin') {
               Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/adminPanel', (Route<dynamic> route) => false);
+                  '/adminHomePage', (Route<dynamic> route) => false);
             }
           }
         },

@@ -1,17 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/models/shavingModel.dart';
 import 'package:universalhaircutz/models/userModel.dart';
-import 'package:universalhaircutz/pages/appointment.dart';
+import 'package:universalhaircutz/pages/appointmentDetails.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class Shaving extends StatelessWidget {
+class AppointmentDetails extends StatefulWidget {
+  final heroTag;
+  final cost;
+  final name;
+
+  const AppointmentDetails({Key? key, this.heroTag, this.cost, this.name})
+      : super(key: key);
+
+  @override
+  _AppointmentDetailsState createState() => _AppointmentDetailsState();
+}
+
+class _AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shaving"),
+        title: Text('Select a barber'),
       ),
       body: Container(
         height: size.height,
@@ -21,7 +32,7 @@ class Shaving extends StatelessWidget {
           builder: (context, snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream:
-                  FirebaseFirestore.instance.collection('Shavings').snapshots(),
+                  FirebaseFirestore.instance.collection('Barbers').snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
@@ -31,16 +42,20 @@ class Shaving extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot keyword = snapshot.data!.docs[index];
-                      ShavingModel shavings = ShavingModel.fromJson(
+
+                      UserModel user = UserModel.fromJson(
                           keyword.data()! as Map<String, dynamic>);
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed(
-                            '/appointment',
-                            arguments: AppointmentDetails(
-                              heroTag: shavings.img,
-                              name: shavings.name,
-                              cost: shavings.cost,
+                            '/appointmentDetails',
+                            arguments: AppointmentSetUp(
+                              heroTag: this.widget.heroTag,
+                              name: this.widget.name,
+                              price: this.widget.cost,
+                              barberName: user.name,
+                              barberEmail: user.email,
+                              barberImage: user.img,
                             ),
                           );
                         },
@@ -59,10 +74,10 @@ class Shaving extends StatelessWidget {
                                       children: [
                                         ClipOval(
                                           child: Hero(
-                                            tag: shavings.img,
+                                            tag: user.img,
                                             child: Image(
                                               image: NetworkImage(
-                                                shavings.img,
+                                                user.img,
                                               ),
                                               loadingBuilder:
                                                   (context, child, progress) {
@@ -96,7 +111,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                "Dr. " + shavings.name,
+                                                user.name,
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',
@@ -107,7 +122,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                '\$${shavings.cost}',
+                                                user.email,
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',

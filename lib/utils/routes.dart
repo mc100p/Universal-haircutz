@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/AdminHomePage.dart';
+import 'package:universalhaircutz/pages/appointment.dart';
+import 'package:universalhaircutz/pages/appointmentDetails.dart';
 import 'package:universalhaircutz/pages/forgotPassword.dart';
 import 'package:universalhaircutz/pages/homepage.dart';
 import 'package:universalhaircutz/pages/login.dart';
 import 'package:universalhaircutz/pages/register.dart';
 import 'package:universalhaircutz/pages/settings.dart';
+import 'package:universalhaircutz/pages/shaving.dart';
 import 'package:universalhaircutz/utils/widget.dart';
 
 class RouteGenerator {
@@ -32,8 +35,8 @@ class RouteGenerator {
       // case '/viewAppointments':
       //   return MaterialPageRoute(builder: (context) => ViewAppointments());
 
-      // case '/prescription':
-      //   return MaterialPageRoute(builder: (context) => Prescription());
+      case '/shaving':
+        return MaterialPageRoute(builder: (context) => Shaving());
 
       //PAGES UNIQUE TO USERS
 
@@ -76,30 +79,28 @@ class RouteGenerator {
       // case '/qr':
       //   return MaterialPageRoute(builder: (context) => Qr());
 
-      // case '/doctorDetails':
-      //   DoctorDetail args = settings.arguments as DoctorDetail;
-      //   return MaterialPageRoute(
-      //     builder: (context) => DoctorDetail(
-      //         heroTag: args.heroTag,
-      //         identification: args.identification,
-      //         occupation: args.occupation,
-      //         description: args.description,
-      //         email: args.email),
-      //   );
+      case '/appointment':
+        AppointmentDetails args = settings.arguments as AppointmentDetails;
+        return MaterialPageRoute(
+          builder: (context) => AppointmentDetails(
+            heroTag: args.heroTag,
+            name: args.name,
+            cost: args.cost,
+          ),
+        );
 
-      // case '/medicationDetails':
-      //   MedicationDetails args = settings.arguments as MedicationDetails;
-      //   return MaterialPageRoute(
-      //     builder: (context) => MedicationDetails(
-      //       directions: args.directions,
-      //       heroTag: args.heroTag,
-      //       inactiveIngredients: args.inactiveIngredients,
-      //       medicationName: args.medicationName,
-      //       price: args.price,
-      //       uses: args.uses,
-      //       warnings: args.warnings,
-      //     ),
-      //   );
+      case '/appointmentDetails':
+        AppointmentSetUp args = settings.arguments as AppointmentSetUp;
+        return MaterialPageRoute(
+          builder: (context) => AppointmentSetUp(
+            heroTag: args.heroTag,
+            name: args.name,
+            price: args.price,
+            barberEmail: args.barberEmail,
+            barberName: args.barberName,
+            barberImage: args.barberImage,
+          ),
+        );
       default:
         return _errorRoute();
     }
