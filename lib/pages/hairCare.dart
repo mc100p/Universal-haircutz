@@ -1,16 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/models/shavingModel.dart';
+import 'package:universalhaircutz/models/haircareModel.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Shaving extends StatelessWidget {
+class HairCare extends StatefulWidget {
+  const HairCare({Key? key}) : super(key: key);
+
+  @override
+  _HairCareState createState() => _HairCareState();
+}
+
+class _HairCareState extends State<HairCare> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shaving"),
+        title: Text('Hair Care'),
       ),
       body: Container(
         height: size.height,
@@ -20,7 +27,7 @@ class Shaving extends StatelessWidget {
           builder: (context, snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream:
-                  FirebaseFirestore.instance.collection('Shavings').snapshots(),
+                  FirebaseFirestore.instance.collection('HairCare').snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
@@ -30,16 +37,16 @@ class Shaving extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot keyword = snapshot.data!.docs[index];
-                      ShavingModel shavings = ShavingModel.fromJson(
+                      HairCareModel hairCare = HairCareModel.fromJson(
                           keyword.data()! as Map<String, dynamic>);
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed(
                             '/appointment',
                             arguments: AppointmentDetails(
-                              heroTag: shavings.img,
-                              name: shavings.name,
-                              cost: shavings.cost,
+                              heroTag: hairCare.img,
+                              name: hairCare.name,
+                              cost: hairCare.cost,
                             ),
                           );
                         },
@@ -58,10 +65,10 @@ class Shaving extends StatelessWidget {
                                       children: [
                                         ClipOval(
                                           child: Hero(
-                                            tag: shavings.img,
+                                            tag: hairCare.img,
                                             child: Image(
                                               image: NetworkImage(
-                                                shavings.img,
+                                                hairCare.img,
                                               ),
                                               loadingBuilder:
                                                   (context, child, progress) {
@@ -95,7 +102,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                shavings.name,
+                                                hairCare.name,
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',
@@ -106,7 +113,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                '\$${shavings.cost}',
+                                                '\$${hairCare.cost}',
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',

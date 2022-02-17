@@ -1,26 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/models/shavingModel.dart';
+import 'package:universalhaircutz/models/beardGroomingModel.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class Shaving extends StatelessWidget {
+class BeardTriming extends StatefulWidget {
+  @override
+  _BeardTrimingState createState() => _BeardTrimingState();
+}
+
+class _BeardTrimingState extends State<BeardTriming> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shaving"),
+        title: Text('Beard Grooming'),
       ),
       body: Container(
-        height: size.height,
         width: double.infinity,
+        height: size.height,
         child: FutureBuilder(
           future: getCurrentUID(),
           builder: (context, snapshot) {
             return StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('Shavings').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('BeardGrooming')
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
@@ -30,7 +36,7 @@ class Shaving extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot keyword = snapshot.data!.docs[index];
-                      ShavingModel shavings = ShavingModel.fromJson(
+                      GroomingModel shavings = GroomingModel.fromJson(
                           keyword.data()! as Map<String, dynamic>);
                       return InkWell(
                         onTap: () {

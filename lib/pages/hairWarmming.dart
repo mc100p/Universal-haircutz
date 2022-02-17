@@ -1,16 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/models/shavingModel.dart';
+import 'package:universalhaircutz/models/hairWarmmingModel.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class Shaving extends StatelessWidget {
+class HairWarming extends StatefulWidget {
+  const HairWarming({Key? key}) : super(key: key);
+
+  @override
+  _HairWarmingState createState() => _HairWarmingState();
+}
+
+class _HairWarmingState extends State<HairWarming> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shaving"),
+        title: Text('Hair Warmming'),
       ),
       body: Container(
         height: size.height,
@@ -19,8 +26,9 @@ class Shaving extends StatelessWidget {
           future: getCurrentUID(),
           builder: (context, snapshot) {
             return StreamBuilder<QuerySnapshot>(
-              stream:
-                  FirebaseFirestore.instance.collection('Shavings').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('HairWarming')
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
@@ -30,16 +38,16 @@ class Shaving extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot keyword = snapshot.data!.docs[index];
-                      ShavingModel shavings = ShavingModel.fromJson(
+                      HairWarmingModel hairWarming = HairWarmingModel.fromJson(
                           keyword.data()! as Map<String, dynamic>);
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed(
                             '/appointment',
                             arguments: AppointmentDetails(
-                              heroTag: shavings.img,
-                              name: shavings.name,
-                              cost: shavings.cost,
+                              heroTag: hairWarming.img,
+                              name: hairWarming.name,
+                              cost: hairWarming.cost,
                             ),
                           );
                         },
@@ -58,10 +66,10 @@ class Shaving extends StatelessWidget {
                                       children: [
                                         ClipOval(
                                           child: Hero(
-                                            tag: shavings.img,
+                                            tag: hairWarming.img,
                                             child: Image(
                                               image: NetworkImage(
-                                                shavings.img,
+                                                hairWarming.img,
                                               ),
                                               loadingBuilder:
                                                   (context, child, progress) {
@@ -95,7 +103,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                shavings.name,
+                                                hairWarming.name,
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',
@@ -106,7 +114,7 @@ class Shaving extends StatelessWidget {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                '\$${shavings.cost}',
+                                                '\$${hairWarming.cost}',
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',

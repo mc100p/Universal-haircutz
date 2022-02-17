@@ -116,11 +116,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                 Navigator.pushNamed(context, '/shaving'),
                             child: containerService(
                                 'images/razor.png', 'Shaving')),
-                        containerService(
-                            'images/blow-dryer.png', 'Hair warming'),
-                        containerService('images/shower.png', 'Hair Care'),
-                        containerService(
-                            'images/beard-trimming.png', 'Beard Triming'),
+                        InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/hairWarmming'),
+                          child: containerService(
+                              'images/blow-dryer.png', 'Hair warming'),
+                        ),
+                        InkWell(
+                            onTap: () =>
+                                Navigator.pushNamed(context, '/hairCare'),
+                            child: containerService(
+                                'images/shower.png', 'Hair Care')),
+                        InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/grooming'),
+                          child: containerService(
+                              'images/beard-trimming.png', 'Beard Triming'),
+                        ),
                       ],
                     ),
                     SliverPadding(

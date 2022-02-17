@@ -137,10 +137,6 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                 ],
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () {},
-                            ),
                           ],
                         ),
                       );

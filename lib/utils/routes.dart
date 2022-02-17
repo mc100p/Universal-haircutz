@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentDetails.dart';
+import 'package:universalhaircutz/pages/beardTriming.dart';
 import 'package:universalhaircutz/pages/forgotPassword.dart';
+import 'package:universalhaircutz/pages/hairCare.dart';
+import 'package:universalhaircutz/pages/hairWarmming.dart';
 import 'package:universalhaircutz/pages/homepage.dart';
 import 'package:universalhaircutz/pages/login.dart';
 import 'package:universalhaircutz/pages/register.dart';
@@ -26,14 +29,14 @@ class RouteGenerator {
 
       // case '/adminProfilePage':
       //   return MaterialPageRoute(builder: (context) => UserProfile());
-      // case '/adminSettings':
-      //   return MaterialPageRoute(builder: (context) => AdminSettings());
+      case '/hairWarmming':
+        return MaterialPageRoute(builder: (context) => HairWarming());
 
-      // case '/addUser':
-      //   return MaterialPageRoute(builder: (context) => AddUser());
+      case '/hairCare':
+        return MaterialPageRoute(builder: (context) => HairCare());
 
-      // case '/viewAppointments':
-      //   return MaterialPageRoute(builder: (context) => ViewAppointments());
+      case '/grooming':
+        return MaterialPageRoute(builder: (context) => BeardTriming());
 
       case '/shaving':
         return MaterialPageRoute(builder: (context) => Shaving());
