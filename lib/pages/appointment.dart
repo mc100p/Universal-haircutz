@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/models/userModel.dart';
-import 'package:universalhaircutz/pages/appointmentDetails.dart';
+import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class AppointmentDetails extends StatefulWidget {

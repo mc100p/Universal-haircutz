@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
-import 'package:universalhaircutz/pages/appointmentDetails.dart';
-import 'package:universalhaircutz/pages/beardTriming.dart';
+import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
+import 'package:universalhaircutz/pages/hairStyle.dart';
 import 'package:universalhaircutz/pages/forgotPassword.dart';
 import 'package:universalhaircutz/pages/hairCare.dart';
 import 'package:universalhaircutz/pages/hairWarmming.dart';
 import 'package:universalhaircutz/pages/homepage.dart';
 import 'package:universalhaircutz/pages/login.dart';
 import 'package:universalhaircutz/pages/register.dart';
+import 'package:universalhaircutz/pages/reservations/reservation.dart';
 import 'package:universalhaircutz/pages/settings.dart';
 import 'package:universalhaircutz/pages/shaving.dart';
 import 'package:universalhaircutz/utils/widget.dart';
@@ -36,7 +37,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => HairCare());
 
       case '/grooming':
-        return MaterialPageRoute(builder: (context) => BeardTriming());
+        return MaterialPageRoute(builder: (context) => HairStyle());
 
       case '/shaving':
         return MaterialPageRoute(builder: (context) => Shaving());
@@ -58,8 +59,8 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(builder: (context) => Login());
 
-      // case '/finance':
-      //   return MaterialPageRoute(builder: (context) => Finance());
+      case '/reservations':
+        return MaterialPageRoute(builder: (context) => Reservation());
 
       // case '/userProfile':
       //   return MaterialPageRoute(builder: (context) => Profile());

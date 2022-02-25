@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           onTap: () =>
                               Navigator.pushNamed(context, '/grooming'),
                           child: containerService(
-                              'images/beard-trimming.png', 'Beard Triming'),
+                              'images/hair-style.png', 'Hair Styles'),
                         ),
                       ],
                     ),
@@ -148,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             color: Theme.of(context).cardColor,
-                            onPressed: () {},
+                            onPressed: () => Navigator.pushNamed(context, '/reservations'),
                             child: Text(
-                              'Reservation Now',
+                              'View Reservations',
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.w600,

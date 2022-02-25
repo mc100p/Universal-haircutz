@@ -4,18 +4,18 @@ import 'package:universalhaircutz/models/beardGroomingModel.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class BeardTriming extends StatefulWidget {
+class HairStyle extends StatefulWidget {
   @override
-  _BeardTrimingState createState() => _BeardTrimingState();
+  _HairStyleState createState() => _HairStyleState();
 }
 
-class _BeardTrimingState extends State<BeardTriming> {
+class _HairStyleState extends State<HairStyle> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Beard Grooming'),
+        title: Text('Hair Style'),
       ),
       body: Container(
         width: double.infinity,

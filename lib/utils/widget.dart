@@ -98,3 +98,45 @@ class BackgroundImage extends StatelessWidget {
     );
   }
 }
+
+SnackBar successDisplay(String success) {
+  return SnackBar(
+    backgroundColor: Colors.green,
+    content: Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      children: [
+        Text(
+          "$success",
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Arial',
+          ),
+        ),
+        Icon(
+          Icons.check_circle_rounded,
+          color: Colors.white,
+        )
+      ],
+    ),
+  );
+}
+
+SnackBar errorDisplay(String error) {
+  return SnackBar(
+    backgroundColor: Colors.red,
+    content: Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      children: [
+        Text("$error",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Arial',
+            )),
+        Icon(
+          Icons.error_outline_sharp,
+          color: Colors.white,
+        )
+      ],
+    ),
+  );
+}
