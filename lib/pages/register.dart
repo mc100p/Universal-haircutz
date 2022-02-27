@@ -354,7 +354,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context, "Verify Email"),
+      appBar: AppBar(title: Text("Sign Up")),
       body: SingleChildScrollView(
         child: Column(
           children: [

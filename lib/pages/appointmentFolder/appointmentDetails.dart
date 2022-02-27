@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:universalhaircutz/services/auth.dart';
 import 'package:universalhaircutz/utils/widget.dart';
@@ -89,10 +88,11 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
               ),
             ),
             Container(
+              color: Theme.of(context).cardColor,
               width: double.infinity,
               child: TabBar(
                 labelStyle: TextStyle(color: Colors.white),
-                // unselectedLabelColor: Colors.blue[900],
+                unselectedLabelColor: Colors.grey,
                 indicator: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                 ),
@@ -247,6 +247,8 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
                                                       'Cost': this.widget.price,
                                                       'Image of serice':
                                                           this.widget.heroTag,
+                                                      'id': id,
+                                                      'date': date,
                                                     };
 
                                                     FirebaseFirestore.instance

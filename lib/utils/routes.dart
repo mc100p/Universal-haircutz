@@ -1,35 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/AdminHomePage.dart';
+import 'package:universalhaircutz/pages/about/about.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
+import 'package:universalhaircutz/pages/feedBack/feedback.dart';
 import 'package:universalhaircutz/pages/hairStyle.dart';
 import 'package:universalhaircutz/pages/forgotPassword.dart';
 import 'package:universalhaircutz/pages/hairCare.dart';
 import 'package:universalhaircutz/pages/hairWarmming.dart';
-import 'package:universalhaircutz/pages/homepage.dart';
+import 'package:universalhaircutz/pages/homepage/homepage.dart';
+import 'package:universalhaircutz/pages/location/location.dart';
 import 'package:universalhaircutz/pages/login.dart';
 import 'package:universalhaircutz/pages/register.dart';
 import 'package:universalhaircutz/pages/reservations/reservation.dart';
 import 'package:universalhaircutz/pages/settings.dart';
 import 'package:universalhaircutz/pages/shaving.dart';
-import 'package:universalhaircutz/utils/widget.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case '/location':
+        return MaterialPageRoute(builder: (context) => Location());
 
-      //PAGES SHARED BY BOTH ADMIN AND USERS
-
-      // case '/introScreen':
-      //   return MaterialPageRoute(builder: (context) => IntroScreen());
-
-      //PAGES UNIQUE TO ADMIN
+      case '/feedBack':
+        return MaterialPageRoute(builder: (context) => FeedBackHelp());
 
       case '/adminHomePage':
         return MaterialPageRoute(builder: (context) => AdminHomePage());
 
-      // case '/adminProfilePage':
-      //   return MaterialPageRoute(builder: (context) => UserProfile());
       case '/hairWarmming':
         return MaterialPageRoute(builder: (context) => HairWarming());
 
@@ -41,8 +39,6 @@ class RouteGenerator {
 
       case '/shaving':
         return MaterialPageRoute(builder: (context) => Shaving());
-
-      //PAGES UNIQUE TO USERS
 
       case '/settings':
         return MaterialPageRoute(builder: (context) => Settings());
@@ -62,26 +58,8 @@ class RouteGenerator {
       case '/reservations':
         return MaterialPageRoute(builder: (context) => Reservation());
 
-      // case '/userProfile':
-      //   return MaterialPageRoute(builder: (context) => Profile());
-
-      // case '/appointment':
-      //   return MaterialPageRoute(builder: (context) => Appointment());
-
-      // case '/feedBack':
-      //   return MaterialPageRoute(builder: (context) => FeedBackHelp());
-
-      // case '/history':
-      //   return MaterialPageRoute(builder: (context) => History());
-
-      // case '/achievement':
-      //   return MaterialPageRoute(builder: (context) => Achievement());
-
-      // case '/cart':
-      //   return MaterialPageRoute(builder: (context) => Cart());
-
-      // case '/qr':
-      //   return MaterialPageRoute(builder: (context) => Qr());
+      case '/about':
+        return MaterialPageRoute(builder: (context) => About());
 
       case '/appointment':
         AppointmentDetails args = settings.arguments as AppointmentDetails;
@@ -114,7 +92,7 @@ class RouteGenerator {
     return MaterialPageRoute(
       builder: (BuildContext builder) {
         return Scaffold(
-          appBar: appBar(builder, "Error 404"),
+          appBar: AppBar(title: Text("Error 404")),
           body: Center(
             child: Text("Page not found....."),
           ),

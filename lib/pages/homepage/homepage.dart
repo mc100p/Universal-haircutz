@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:universalhaircutz/pages/drawer/drawer.dart';
+import 'package:universalhaircutz/pages/homepage/containerLayout.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -10,30 +12,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: Drawer(
-        child: Center(
-          child: ListView(
-            children: [
-              ListTile(
-                title: Text("Settings"),
-                onTap: () => Navigator.popAndPushNamed(context, '/settings'),
-                trailing: Icon(Icons.settings),
-              ),
-              ListTile(
-                title: Text("Logout"),
-                trailing: Icon(Icons.exit_to_app),
-                onTap: () async {
-                  AuthService().signOut(context);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      // extendBodyBehindAppBar: true,
-      // extendBody: true,
+      drawer: DrawerClass(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -115,23 +95,23 @@ class _MyHomePageState extends State<MyHomePage> {
                             onTap: () =>
                                 Navigator.pushNamed(context, '/shaving'),
                             child: containerService(
-                                'images/razor.png', 'Shaving')),
+                                context, 'images/razor.png', 'Shaving')),
                         InkWell(
                           onTap: () =>
                               Navigator.pushNamed(context, '/hairWarmming'),
                           child: containerService(
-                              'images/blow-dryer.png', 'Hair warming'),
+                              context, 'images/blow-dryer.png', 'Hair warming'),
                         ),
                         InkWell(
                             onTap: () =>
                                 Navigator.pushNamed(context, '/hairCare'),
                             child: containerService(
-                                'images/shower.png', 'Hair Care')),
+                                context, 'images/shower.png', 'Hair Care')),
                         InkWell(
                           onTap: () =>
                               Navigator.pushNamed(context, '/grooming'),
                           child: containerService(
-                              'images/hair-style.png', 'Hair Styles'),
+                              context, 'images/hair-style.png', 'Hair Styles'),
                         ),
                       ],
                     ),
@@ -148,7 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             color: Theme.of(context).cardColor,
-                            onPressed: () => Navigator.pushNamed(context, '/reservations'),
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/reservations'),
                             child: Text(
                               'View Reservations',
                               style: TextStyle(
@@ -172,35 +153,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
         },
-      ),
-    );
-  }
-
-  Widget containerService(String image, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        height: 20,
-        width: 20,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image(
-              image: AssetImage('$image'),
-              height: 80,
-              width: 80,
-            ),
-            SizedBox(height: 20),
-            Text(
-              '$text',
-              style: TextStyle(color: Colors.grey, fontSize: 18.0),
-            ),
-          ],
-        ),
       ),
     );
   }
