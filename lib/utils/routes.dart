@@ -56,7 +56,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => Login());
 
       case '/reservations':
-        return MaterialPageRoute(builder: (context) => Reservation());
+        return MaterialPageRoute(builder: (context) => Appointment());
 
       case '/about':
         return MaterialPageRoute(builder: (context) => About());
