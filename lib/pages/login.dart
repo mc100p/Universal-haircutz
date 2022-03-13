@@ -1,6 +1,4 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:universalhaircutz/services/auth.dart';
 import 'package:universalhaircutz/utils/widget.dart';
 
@@ -13,7 +11,6 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   String? _token;
-  String _errorMessage = '';
   bool _obscureText = true;
   bool isloading = false;
 
@@ -56,6 +53,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                         new Column(
                           children: <Widget>[
                             new TextFormField(
+                              style: TextStyle(color: Colors.black),
                               decoration: textFieldInputDecoration(
                                 context,
                                 "Enter Your Email",
@@ -69,6 +67,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                             ),
                             SizedBox(height: 15.0),
                             new TextFormField(
+                              style: TextStyle(color: Colors.black),
                               decoration:
                                   textFieldInputDecorationForLoginPagePassword(
                                 context,
@@ -192,18 +191,6 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Text(
-                                _errorMessage,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                  color: Colors.red,
-                                ),
                               ),
                             ),
                           ],

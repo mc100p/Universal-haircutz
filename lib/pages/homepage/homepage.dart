@@ -98,15 +98,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                 context, 'images/razor.png', 'Shaving')),
                         InkWell(
                           onTap: () =>
-                              Navigator.pushNamed(context, '/hairWarmming'),
+                              Navigator.pushNamed(context, '/hairProducts'),
                           child: containerService(
-                              context, 'images/blow-dryer.png', 'Hair warming'),
+                              context, 'images/shower.png', 'Hair Products'),
                         ),
                         InkWell(
                             onTap: () =>
                                 Navigator.pushNamed(context, '/hairCare'),
                             child: containerService(
-                                context, 'images/shower.png', 'Hair Care')),
+                                context, 'images/hair-gel.png', 'Hair Care')),
                         InkWell(
                           onTap: () =>
                               Navigator.pushNamed(context, '/grooming'),

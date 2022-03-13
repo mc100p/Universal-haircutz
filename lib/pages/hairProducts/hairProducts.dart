@@ -1,23 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/models/hairWarmmingModel.dart';
-import 'package:universalhaircutz/pages/appointment.dart';
+import 'package:universalhaircutz/models/hairProductsModel.dart';
+import 'package:universalhaircutz/pages/hairProducts/hairProdDetails.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class HairWarming extends StatefulWidget {
-  const HairWarming({Key? key}) : super(key: key);
+class HairProducts extends StatefulWidget {
+  const HairProducts({Key? key}) : super(key: key);
 
   @override
-  _HairWarmingState createState() => _HairWarmingState();
+  _HairProductsState createState() => _HairProductsState();
 }
 
-class _HairWarmingState extends State<HairWarming> {
+class _HairProductsState extends State<HairProducts> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hair Warmming'),
+        title: Text('Hair Products'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () => Navigator.pushNamed(context, '/cart'),
+          ),
+        ],
       ),
       body: Container(
         height: size.height,
@@ -27,7 +33,7 @@ class _HairWarmingState extends State<HairWarming> {
           builder: (context, snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('HairWarming')
+                  .collection('HairProducts')
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -38,16 +44,21 @@ class _HairWarmingState extends State<HairWarming> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot keyword = snapshot.data!.docs[index];
-                      HairWarmingModel hairWarming = HairWarmingModel.fromJson(
+                      HairProductsData hairProducts = HairProductsData.fromJson(
                           keyword.data()! as Map<String, dynamic>);
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).pushNamed(
-                            '/appointment',
-                            arguments: AppointmentDetails(
-                              heroTag: hairWarming.img,
-                              name: hairWarming.name,
-                              cost: hairWarming.cost,
+                            '/hairProductDetails',
+                            arguments: HairProductsDetails(
+                              heroTag: hairProducts.img,
+                              name: hairProducts.productName,
+                              price: hairProducts.price,
+                              uses: hairProducts.uses,
+                              warnings: hairProducts.warnings,
+                              directions: hairProducts.directions,
+                              inactiveIngredients:
+                                  hairProducts.inactiveIngredients,
                             ),
                           );
                         },
@@ -66,10 +77,10 @@ class _HairWarmingState extends State<HairWarming> {
                                       children: [
                                         ClipOval(
                                           child: Hero(
-                                            tag: hairWarming.img,
+                                            tag: hairProducts.img,
                                             child: Image(
                                               image: NetworkImage(
-                                                hairWarming.img,
+                                                hairProducts.img,
                                               ),
                                               loadingBuilder:
                                                   (context, child, progress) {
@@ -103,7 +114,7 @@ class _HairWarmingState extends State<HairWarming> {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                hairWarming.name,
+                                                hairProducts.productName,
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',
@@ -114,7 +125,7 @@ class _HairWarmingState extends State<HairWarming> {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                '\$${hairWarming.cost}',
+                                                '\$${hairProducts.price}',
                                                 style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontFamily: 'PlayfairDisplay',

@@ -1,33 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 SnackBar snackBarWidget(Widget content, Color color) {
   return SnackBar(content: content, backgroundColor: color);
 }
-
-// AppBar appBar(
-//   BuildContext context,
-//   String title,
-// ) {
-//   return AppBar(
-//     backgroundColor: Theme.of(context).primaryColor,
-//     iconTheme: IconThemeData(
-//       color: Colors.white,
-//     ),
-//     title: Text(
-//       title,
-//       style: TextStyle(fontFamily: 'PlayfairDisplay', color: Colors.white),
-//     ),
-//     leading: IconButton(
-//       icon: Icon(Icons.arrow_back_ios_outlined),
-//       onPressed: () => Navigator.pop(context),
-//     ),
-//     elevation: 0.0,
-//     actions: [],
-//     centerTitle: true,
-//   );
-// }
 
 AppBar appBarWithOption(BuildContext context, String title, actions) {
   return AppBar(
@@ -61,6 +36,7 @@ InputDecoration textFieldInputDecoration(
     hintStyle: TextStyle(
       fontFamily: 'PlayfairDisplay-Regular',
       fontSize: 15.0,
+      color: Colors.black,
     ),
     focusColor: Theme.of(context).primaryColor,
   );
@@ -80,6 +56,7 @@ InputDecoration textFieldInputDecorationForLoginPagePassword(
     hintStyle: TextStyle(
       fontFamily: 'PlayfairDisplay-Regular',
       fontSize: 15.0,
+      color: Colors.black,
     ),
   );
 }

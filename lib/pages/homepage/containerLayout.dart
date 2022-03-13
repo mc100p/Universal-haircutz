@@ -15,8 +15,8 @@ Widget containerService(BuildContext context, String image, String text) {
         children: [
           Image(
             image: AssetImage('$image'),
-            height: 80,
-            width: 80,
+            height: 50,
+            width: 50,
           ),
           SizedBox(height: 20),
           Text(
