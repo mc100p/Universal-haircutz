@@ -108,7 +108,7 @@ class _AppointmentListState extends State<AppointmentList> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot clients = snapshot.data!.docs[index];
 
-                  if (clients.get('Barber email') == email) {
+                  if (clients.get('Barber email') != email) {
                     return Container(height: 0);
                   }
                   return Padding(
