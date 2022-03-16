@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/pages/AdminHomePage.dart';
+import 'package:universalhaircutz/pages/adminPanel/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/about/about.dart';
+import 'package:universalhaircutz/pages/adminPanel/adminRervations.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
 import 'package:universalhaircutz/pages/feedBack/feedback.dart';
@@ -69,6 +70,9 @@ class RouteGenerator {
 
       case '/about':
         return MaterialPageRoute(builder: (context) => About());
+
+      case '/adminReservations':
+        return MaterialPageRoute(builder: (context) => AdminReservations());
 
       case '/appointment':
         AppointmentDetails args = settings.arguments as AppointmentDetails;

@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+class AdminDrawerClass extends StatelessWidget {
+  const AdminDrawerClass({
+    Key? key,
+  }) : super(key: key);
 
-  @override
-  _AdminHomePageState createState() => _AdminHomePageState();
-}
-
-class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: Center(
+    return Drawer(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50.0),
           child: ListView(
             children: [
               ListTile(
@@ -31,9 +29,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ],
           ),
         ),
-      ),
-      body: Center(
-        child: Text("Admin Panel"),
       ),
     );
   }

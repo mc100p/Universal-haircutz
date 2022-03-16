@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universalhaircutz/pages/AdminHomePage.dart';
+import 'package:universalhaircutz/pages/adminPanel/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/Welcome.dart';
 import 'package:universalhaircutz/pages/homepage/homepage.dart';
 import 'package:universalhaircutz/utils/provider.dart';

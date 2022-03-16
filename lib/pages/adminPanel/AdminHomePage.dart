@@ -1,19 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:universalhaircutz/pages/adminPanel/adminComponents.dart';
 import 'package:universalhaircutz/pages/drawer/drawer.dart';
-import 'package:universalhaircutz/utils/containerLayout.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
-class MyHomePage extends StatefulWidget {
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({Key? key}) : super(key: key);
+
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerClass(),
+      drawer: AdminDrawerClass(),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -91,28 +93,28 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 15,
                       children: [
-                        InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/shaving'),
-                            child: containerService(
-                                context, 'images/razor.png', 'Shaving')),
-                        InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/hairProducts'),
-                          child: containerService(
-                              context, 'images/shower.png', 'Hair Products'),
-                        ),
-                        InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/hairCare'),
-                            child: containerService(
-                                context, 'images/hair-gel.png', 'Hair Care')),
-                        InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, '/grooming'),
-                          child: containerService(
-                              context, 'images/hair-style.png', 'Hair Styles'),
-                        ),
+                        // InkWell(
+                        //     onTap: () =>
+                        //         Navigator.pushNamed(context, '/shaving'),
+                        //     child: containerService(
+                        //         context, 'images/razor.png', 'Shaving')),
+                        // InkWell(
+                        //   onTap: () =>
+                        //       Navigator.pushNamed(context, '/hairProducts'),
+                        //   child: containerService(
+                        //       context, 'images/shower.png', 'Hair Products'),
+                        // ),
+                        // InkWell(
+                        //     onTap: () =>
+                        //         Navigator.pushNamed(context, '/hairCare'),
+                        //     child: containerService(
+                        //         context, 'images/hair-gel.png', 'Hair Care')),
+                        // InkWell(
+                        //   onTap: () =>
+                        //       Navigator.pushNamed(context, '/grooming'),
+                        //   child: containerService(
+                        //       context, 'images/hair-style.png', 'Hair Styles'),
+                        // ),
                       ],
                     ),
                     SliverPadding(
@@ -128,10 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             color: Theme.of(context).cardColor,
-                            onPressed: () =>
-                                Navigator.pushNamed(context, '/reservations'),
+                            onPressed: () => Navigator.pushNamed(
+                                context, '/adminReservations'),
                             child: Text(
-                              'View Reservations',
+                              'View Appointments',
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.w600,
