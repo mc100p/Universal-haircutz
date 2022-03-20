@@ -23,11 +23,8 @@ class _CartState extends State<Cart> {
             future: getCurrentUID(),
             builder: (context, AsyncSnapshot snapshot) {
               return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('userInformation')
-                    .doc(snapshot.data)
-                    .collection('Cart')
-                    .snapshots(),
+                stream:
+                    FirebaseFirestore.instance.collection('Cart').snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData)
@@ -58,6 +55,20 @@ class CartList extends StatefulWidget {
 class _CartListState extends State<CartList> {
   final formatCurrency = new NumberFormat.simpleCurrency();
   double mean = 0.0;
+
+  var uid;
+
+  getUID() async {
+    uid = await getCurrentUID();
+    return uid;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUID();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,11 +78,8 @@ class _CartListState extends State<CartList> {
             future: getCurrentUID(),
             builder: (context, AsyncSnapshot snapshot) {
               return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('userInformation')
-                    .doc(snapshot.data)
-                    .collection('Cart')
-                    .snapshots(),
+                stream:
+                    FirebaseFirestore.instance.collection('Cart').snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.data == null)
@@ -91,6 +99,10 @@ class _CartListState extends State<CartList> {
                             itemBuilder: (context, index) {
                               DocumentSnapshot point =
                                   snapshot.data!.docs[index];
+
+                              if (point.get('Uid') != uid) {
+                                return Container();
+                              }
                               double myPrices = double.parse(
                                 point['Price'].toString().replaceAll(",", ""),
                               );

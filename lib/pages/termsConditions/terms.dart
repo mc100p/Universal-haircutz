@@ -8,7 +8,6 @@ import 'package:universalhaircutz/pages/termsConditions/termsAndServices.dart';
 class Terms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final scrollControll = ScrollController();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -55,10 +54,6 @@ class Terms extends StatelessWidget {
                       children: <Widget>[
                         Container(
                           height: MediaQuery.of(context).size.height,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).canvasColor,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(75))),
                           child: ClipPath(
                             clipper: ShapeBorderClipper(
                               shape: RoundedRectangleBorder(

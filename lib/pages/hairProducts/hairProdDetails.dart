@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class HairProductsDetails extends StatefulWidget {
@@ -42,6 +43,21 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
   var num = 1;
 
   var selectedCard = 'INGREDIENTS';
+
+  var email;
+
+  getSharedPreferenceData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      email = sharedPreferences.getString('email');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSharedPreferenceData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +108,6 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
                           topLeft: Radius.circular(45.0),
                           topRight: Radius.circular(45.0),
                         ),
-                        // color: Theme.of(context).canvasColor,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 325.0),
@@ -128,23 +143,31 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
                                                 .button,
                                           ),
                                           onPressed: () async {
+                                            var uid = await getCurrentUID();
+                                            var date = DateTime.now();
+                                            // var productList = {
+                                            //   {
+                                            //     "Item name": widget.heroTag,
+                                            //     "product name": widget.name,
+                                            //     "Price": widget.price,
+                                            //     "Quantity": num.toString(),
+                                            //     "Progress": state,
+                                            //     "Date": date,
+                                            //   },
+                                            // };
                                             try {
-                                              var uid = await getCurrentUID();
-                                              var date = DateTime.now();
                                               FirebaseFirestore.instance
-                                                  .collection('userInformation')
-                                                  .doc(uid)
                                                   .collection('Cart')
-                                                  .add(
-                                                {
-                                                  "Item name": widget.heroTag,
-                                                  "product name": widget.name,
-                                                  "Price": widget.price,
-                                                  "Quantity": num.toString(),
-                                                  "Progress": state,
-                                                  "Date": date,
-                                                },
-                                              ).then((value) {
+                                                  .add({
+                                                "Item name": widget.heroTag,
+                                                "product name": widget.name,
+                                                "Price": widget.price,
+                                                "Quantity": num.toString(),
+                                                "Progress": state,
+                                                "Uid": uid,
+                                                "Client email": email,
+                                                "Date": date,
+                                              }).then((value) {
                                                 Fluttertoast.showToast(
                                                     msg: "Item added to cart",
                                                     toastLength:

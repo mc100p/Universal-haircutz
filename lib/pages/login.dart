@@ -10,7 +10,6 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
-  String? _token;
   bool _obscureText = true;
   bool isloading = false;
 
@@ -25,8 +24,6 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    _token = getToken().toString();
   }
 
   @override
@@ -150,7 +147,7 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                                     context,
                                                     _email.text.trim(),
                                                     _password.text.trim(),
-                                                    _token!,
+                                                    '',
                                                     callBack);
 
                                             if (result == null) {

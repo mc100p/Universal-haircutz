@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class AdminDrawerClass extends StatelessWidget {
-  const AdminDrawerClass({
-    Key? key,
-  }) : super(key: key);
+  const AdminDrawerClass({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

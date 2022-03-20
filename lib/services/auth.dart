@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dbcrypt/dbcrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 getToken() async {
   final token = await FirebaseMessaging.instance.getToken();
   print('token: ' + token!);
+  return token;
 }
 
 getCurrentUser() async {
@@ -138,6 +140,9 @@ class AuthService {
     try {
       FocusScope.of(context).requestFocus(FocusNode());
 
+      token = await getToken();
+      print('token from sign up: $token');
+
       var date = DateTime.now();
 
       var userTokenDataObject = {
@@ -149,8 +154,13 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
 
+      var hashedPassword = new DBCrypt().hashpw(password, DBCrypt().gensalt());
+
+      print('password: $hashedPassword');
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('email', email);
+      prefs.setString('password', hashedPassword);
 
       await FirebaseFirestore.instance
           .collection('Users Token Data')

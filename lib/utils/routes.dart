@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/adminPanel/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/about/about.dart';
 import 'package:universalhaircutz/pages/adminPanel/adminRervations.dart';
+import 'package:universalhaircutz/pages/adminPanel/invertory.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
 import 'package:universalhaircutz/pages/feedBack/feedback.dart';
@@ -23,6 +24,9 @@ import 'package:universalhaircutz/pages/termsConditions/terms.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case '/inventory':
+        return MaterialPageRoute(builder: (context) => Invertory());
+
       case '/cart':
         return MaterialPageRoute(builder: (context) => Cart());
 

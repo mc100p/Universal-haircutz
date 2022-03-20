@@ -31,12 +31,6 @@ class _FeedBackHelpState extends State<FeedBackHelp> {
                 });
           }),
       body: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(75),
-          ),
-        ),
         height: MediaQuery.of(context).size.height,
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0),
@@ -46,10 +40,6 @@ class _FeedBackHelpState extends State<FeedBackHelp> {
               return StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('FeedBack')
-                    // .doc(snapshot.data)
-                    // .collection("FeedBack")
-                    // .where("User", isEqualTo: snapshot.data)
-                    // .orderBy("Date", descending: true)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universalhaircutz/pages/adminPanel/adminComponents.dart';
-import 'package:universalhaircutz/pages/drawer/drawer.dart';
+import 'package:universalhaircutz/pages/adminPanel/viewInventory.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -12,8 +13,32 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
+  var uid;
+  var encrpytedPassword;
+  getUser() async {
+    var value = await getCurrentUID();
+    setState(() {
+      uid = value;
+    });
+    print('uid admin: $uid');
+    return uid;
+  }
+
+  getSharedPreferenceData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    encrpytedPassword = prefs.getString('password');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+    getSharedPreferenceData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('admin: $uid');
     return Scaffold(
       drawer: AdminDrawerClass(),
       appBar: AppBar(
@@ -143,6 +168,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           ),
                         ),
                       ),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(top: 50),
+                    ),
+                    ViewInventory(
+                      uid: uid,
+                      encrpytedPassword: encrpytedPassword,
                     ),
                     SliverPadding(
                       padding: const EdgeInsets.only(top: 50),
