@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>164447752896-4gl8nosukv3d1he7nooo21rr17n5cpn4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.164447752896-4gl8nosukv3d1he7nooo21rr17n5cpn4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDPgnDT0MgXpgBxIgXoClwEt1oy2vOD4pE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>164447752896</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.universalhaircutz</string>
+	<key>PROJECT_ID</key>
+	<string>universal-haircutz</string>
+	<key>STORAGE_BUCKET</key>
+	<string>universal-haircutz.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:164447752896:ios:bada2966868e4b32d11325</string>
+</dict>
+</plist>

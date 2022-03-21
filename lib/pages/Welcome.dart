@@ -52,89 +52,85 @@ class _WelcomeState extends State<Welcome> with TickerProviderStateMixin {
     return AnimatedBuilder(
       animation: animationController,
       builder: (context, child) {
-        return SafeArea(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              BackgroundImage(),
-              Scaffold(
-                backgroundColor: Colors.transparent,
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.05),
-                      Center(
-                        child: Transform(
-                          transform: Matrix4.translationValues(
-                              0.0, bodyAnimation.value * width, 0.0),
-                          child: Image.asset("images/logo.png",
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              width: MediaQuery.of(context).size.height * 0.35),
-                        ),
-                      ),
-                      Transform(
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            BackgroundImage(),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                    Center(
+                      child: Transform(
                         transform: Matrix4.translationValues(
                             0.0, bodyAnimation.value * width, 0.0),
-                        child: Container(
-                          height: 100.0,
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
+                        child: Image.asset("images/logo.png",
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            width: MediaQuery.of(context).size.height * 0.35),
                       ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.10),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 10,
-                        width: MediaQuery.of(context).size.width - 50,
-                        child: Transform(
-                          transform: Matrix4.translationValues(
-                              0.0, bodyAnimationMove.value * width, 0.0),
-                          child: MaterialButton(
-                            elevation: 17.0,
-                            color: Theme.of(context).primaryColor,
-                            onPressed: () {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/login', (Route<dynamic> route) => false);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Get a stylish haircut",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  Icons.arrow_right,
-                                  color: Theme.of(context).primaryColor,
-                                )
-                              ],
-                            ),
+                    ),
+                    Transform(
+                      transform: Matrix4.translationValues(
+                          0.0, bodyAnimation.value * width, 0.0),
+                      child: Container(
+                        height: 100.0,
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.10),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 10,
+                      width: MediaQuery.of(context).size.width - 50,
+                      child: Transform(
+                        transform: Matrix4.translationValues(
+                            0.0, bodyAnimationMove.value * width, 0.0),
+                        child: MaterialButton(
+                          elevation: 17.0,
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/login', (Route<dynamic> route) => false);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Get a stylish haircut",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.arrow_right,
+                                color: Theme.of(context).primaryColor,
+                              )
+                            ],
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
-                        child: Wrap(
-                          children: [
-                            Transform(
-                              transform: Matrix4.translationValues(
-                                  0.0, titleAnimationB.value * width, 0.0),
-                              child: Text(
-                                "Welcome to Universal Haircutz",
-                                style: TextStyle(
-                                    fontSize: 12.0, color: Colors.white),
-                              ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50.0),
+                      child: Wrap(
+                        children: [
+                          Transform(
+                            transform: Matrix4.translationValues(
+                                0.0, titleAnimationB.value * width, 0.0),
+                            child: Text(
+                              "Welcome to Universal Haircutz",
+                              style: TextStyle(
+                                  fontSize: 12.0, color: Colors.white),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

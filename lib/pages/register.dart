@@ -40,285 +40,281 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          BackgroundImage(),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              // reverse: true,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 50.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: IconButton(
-                          icon: Icon(
-                            Icons.chevron_left,
-                            color: Colors.white,
-                          ),
-                          iconSize: 40.0,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        BackgroundImage(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            // reverse: true,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 50.0,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.chevron_left,
+                          color: Colors.white,
+                        ),
+                        iconSize: 40.0,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 5.0,
+                  ),
+                  child: Text(
+                    "Fill out Registration Form",
+                    style: TextStyle(
+                      fontFamily: 'PlayfairDisplay-Regular',
+                      color: Colors.white,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 5.0,
-                    ),
-                    child: Text(
-                      "Fill out Registration Form",
-                      style: TextStyle(
-                        fontFamily: 'PlayfairDisplay-Regular',
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    endIndent: 50,
-                    indent: 50,
-                  ),
-                  new Form(
-                    key: _formKey,
-                    child: new Container(
-                      padding: const EdgeInsets.all(40.0),
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          new Column(
-                            children: <Widget>[
-                              new TextFormField(
-                                decoration: textFieldInputDecoration(
-                                    context, "Enter Your Full Name"),
-                                validator: (value) => value!.isEmpty
-                                    ? 'Name Cannot be empty'
-                                    : null,
-                                controller: _fullname,
-                                // onSaved: (value) => _fullname = value!.trim(),
-                                keyboardType: TextInputType.text,
-                              ),
-                              SizedBox(height: 15.0),
-                              new TextFormField(
-                                decoration: textFieldInputDecoration(
-                                    context, "Enter Your Email Address:"),
-                                validator: (value) =>
-                                    value!.isEmpty || !value.contains("@")
-                                        ? 'Enter a valid email address'
-                                        : null,
-                                controller: _email,
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              SizedBox(height: 15.0),
-                              new TextFormField(
-                                decoration: textFieldInputDecoration(
-                                    context, "Enter Your Address:"),
-                                validator: (value) => value!.isEmpty
-                                    ? 'Enter a valid address'
-                                    : null,
-                                controller: _address,
-                                keyboardType: TextInputType.name,
-                              ),
-                              SizedBox(height: 15.0),
-                              new TextFormField(
-                                decoration:
-                                    textFieldInputDecorationForLoginPagePassword(
-                                  context,
-                                  "Enter Password",
-                                  IconButton(
-                                    iconSize: 28,
-                                    color: Theme.of(context).primaryColor,
-                                    icon: Icon(_obscureText
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility),
-                                    onPressed: () {
-                                      _toggle();
-                                    },
-                                  ),
+                ),
+                Divider(
+                  color: Colors.grey,
+                  endIndent: 50,
+                  indent: 50,
+                ),
+                new Form(
+                  key: _formKey,
+                  child: new Container(
+                    padding: const EdgeInsets.all(40.0),
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new Column(
+                          children: <Widget>[
+                            new TextFormField(
+                              decoration: textFieldInputDecoration(
+                                  context, "Enter Your Full Name"),
+                              validator: (value) => value!.isEmpty
+                                  ? 'Name Cannot be empty'
+                                  : null,
+                              controller: _fullname,
+                              // onSaved: (value) => _fullname = value!.trim(),
+                              keyboardType: TextInputType.text,
+                            ),
+                            SizedBox(height: 15.0),
+                            new TextFormField(
+                              decoration: textFieldInputDecoration(
+                                  context, "Enter Your Email Address:"),
+                              validator: (value) =>
+                                  value!.isEmpty || !value.contains("@")
+                                      ? 'Enter a valid email address'
+                                      : null,
+                              controller: _email,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            SizedBox(height: 15.0),
+                            new TextFormField(
+                              decoration: textFieldInputDecoration(
+                                  context, "Enter Your Address:"),
+                              validator: (value) => value!.isEmpty
+                                  ? 'Enter a valid address'
+                                  : null,
+                              controller: _address,
+                              keyboardType: TextInputType.name,
+                            ),
+                            SizedBox(height: 15.0),
+                            new TextFormField(
+                              decoration:
+                                  textFieldInputDecorationForLoginPagePassword(
+                                context,
+                                "Enter Password",
+                                IconButton(
+                                  iconSize: 28,
+                                  color: Theme.of(context).primaryColor,
+                                  icon: Icon(_obscureText
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility),
+                                  onPressed: () {
+                                    _toggle();
+                                  },
                                 ),
-                                validator: passwordValidator,
-                                controller: _password,
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: _obscureText,
                               ),
-                              SizedBox(height: 15.0),
-                              new TextFormField(
-                                decoration:
-                                    textFieldInputDecorationForLoginPagePassword(
-                                  context,
-                                  "Confirm Password",
-                                  IconButton(
-                                    iconSize: 28,
-                                    color: Theme.of(context).primaryColor,
-                                    icon: Icon(_obscureText
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility),
-                                    onPressed: () {
-                                      _toggle();
-                                    },
-                                  ),
+                              validator: passwordValidator,
+                              controller: _password,
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: _obscureText,
+                            ),
+                            SizedBox(height: 15.0),
+                            new TextFormField(
+                              decoration:
+                                  textFieldInputDecorationForLoginPagePassword(
+                                context,
+                                "Confirm Password",
+                                IconButton(
+                                  iconSize: 28,
+                                  color: Theme.of(context).primaryColor,
+                                  icon: Icon(_obscureText
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility),
+                                  onPressed: () {
+                                    _toggle();
+                                  },
                                 ),
-                                validator: (value) => MatchValidator(
-                                        errorText: 'Passwords do not match')
-                                    .validateMatch(value!, _password.text),
-                                keyboardType: TextInputType.visiblePassword,
-                                obscureText: _obscureText,
                               ),
-                              new Padding(
-                                  padding: const EdgeInsets.only(top: 30.0)),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 90.0),
-                                child: isloading
-                                    ? Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 3,
-                                          valueColor: AlwaysStoppedAnimation<
-                                                  Color>(
-                                              Theme.of(context).primaryColor),
-                                        ),
-                                      )
-                                    : SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                15,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                50,
-                                        child: MaterialButton(
-                                          onPressed: () async {
-                                            if (_formKey.currentState!
-                                                .validate()) {
-                                              if (mounted) {
-                                                setState(
-                                                    () => isloading = true);
+                              validator: (value) => MatchValidator(
+                                      errorText: 'Passwords do not match')
+                                  .validateMatch(value!, _password.text),
+                              keyboardType: TextInputType.visiblePassword,
+                              obscureText: _obscureText,
+                            ),
+                            new Padding(
+                                padding: const EdgeInsets.only(top: 30.0)),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 90.0),
+                              child: isloading
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              15,
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
+                                      child: MaterialButton(
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            if (mounted) {
+                                              setState(() => isloading = true);
+                                            }
+
+                                            try {
+                                              EmailAuth emailAuth = EmailAuth(
+                                                  sessionName:
+                                                      "Universal Haircutz");
+
+                                              await emailAuth.sendOtp(
+                                                  recipientMail:
+                                                      _email.text.trim());
+
+                                              var snackBar = snackBarWidget(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        "Check your email",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      Icon(
+                                                        Icons
+                                                            .check_circle_rounded,
+                                                        color: Colors.white,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Colors.green);
+
+                                              if (mounted)
+                                                setState(() {
+                                                  isloading = false;
+                                                });
+
+                                              void callBack() {
+                                                setState(() {
+                                                  isloading = false;
+                                                });
                                               }
 
-                                              try {
-                                                EmailAuth emailAuth = EmailAuth(
-                                                    sessionName:
-                                                        "Universal Haircutz");
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
 
-                                                await emailAuth.sendOtp(
-                                                    recipientMail:
-                                                        _email.text.trim());
-
-                                                var snackBar = snackBarWidget(
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          "Check your email",
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (builder) {
+                                                    return VerifyEmail(
+                                                      email: _email,
+                                                      fullName: _fullname,
+                                                      password: _password,
+                                                      token: _token,
+                                                      address: _address,
+                                                      callback: callBack,
+                                                    );
+                                                  });
+                                            } catch (e) {
+                                              var snackBar = snackBarWidget(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      ConstrainedBox(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxWidth: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.80,
+                                                        ),
+                                                        child: Text(
+                                                          "Failed to send OTP code, try again later",
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white),
                                                         ),
-                                                        Icon(
-                                                          Icons
-                                                              .check_circle_rounded,
-                                                          color: Colors.white,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Colors.green);
+                                                      ),
+                                                      Icon(
+                                                        Icons
+                                                            .error_outline_sharp,
+                                                        color: Colors.white,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Colors.red);
 
-                                                if (mounted)
-                                                  setState(() {
-                                                    isloading = false;
-                                                  });
-
-                                                void callBack() {
-                                                  setState(() {
-                                                    isloading = false;
-                                                  });
-                                                }
-
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
-
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (builder) {
-                                                      return VerifyEmail(
-                                                        email: _email,
-                                                        fullName: _fullname,
-                                                        password: _password,
-                                                        token: _token,
-                                                        address: _address,
-                                                        callback: callBack,
-                                                      );
-                                                    });
-                                              } catch (e) {
-                                                var snackBar = snackBarWidget(
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        ConstrainedBox(
-                                                          constraints:
-                                                              BoxConstraints(
-                                                            maxWidth: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.80,
-                                                          ),
-                                                          child: Text(
-                                                            "Failed to send OTP code, try again later",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                        ),
-                                                        Icon(
-                                                          Icons
-                                                              .error_outline_sharp,
-                                                          color: Colors.white,
-                                                        )
-                                                      ],
-                                                    ),
-                                                    Colors.red);
-
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(snackBar);
-                                              }
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
                                             }
-                                          },
-                                          color: Theme.of(context).primaryColor,
-                                          textColor: Colors.white,
-                                          child: new Text("Sign Up",
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          splashColor: Colors.white,
-                                        ),
+                                          }
+                                        },
+                                        color: Theme.of(context).primaryColor,
+                                        textColor: Colors.white,
+                                        child: new Text("Sign Up",
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        splashColor: Colors.white,
                                       ),
-                              ),
-                              Text(
-                                _errorMessage,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                    ),
+                            ),
+                            Text(
+                              _errorMessage,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
