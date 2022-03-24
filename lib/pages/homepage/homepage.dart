@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:universalhaircutz/main.dart';
 import 'package:universalhaircutz/pages/drawer/drawer.dart';
 import 'package:universalhaircutz/utils/containerLayout.dart';
 import 'package:universalhaircutz/services/auth.dart';
