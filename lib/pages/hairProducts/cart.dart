@@ -57,16 +57,33 @@ class _CartListState extends State<CartList> {
   double mean = 0.0;
 
   var uid;
+  bool purchasePossible = false;
 
   getUID() async {
     uid = await getCurrentUID();
     return uid;
   }
 
+  isPurchasePossible() async {
+    var uid = await getCurrentUID();
+    DocumentSnapshot ds =
+        await FirebaseFirestore.instance.collection("Allergies").doc(uid).get();
+    if (mounted)
+      setState(() {
+        purchasePossible = ds.exists;
+      });
+    if (purchasePossible == true) {
+      print('purchase possible');
+    } else {
+      print('purchase not possible');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getUID();
+    isPurchasePossible();
   }
 
   @override
@@ -117,8 +134,6 @@ class _CartListState extends State<CartList> {
                               total += value;
 
                               mean = total;
-                              print(mean);
-
                               return SingleChildScrollView(
                                 child: Container(
                                   child: InkWell(
@@ -238,13 +253,49 @@ class _CartListState extends State<CartList> {
                         height: MediaQuery.of(context).size.height / 10,
                         child: MaterialButton(
                           color: Theme.of(context).primaryColor,
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return CheckOutDialog();
-                                });
-                          },
+                          onPressed: purchasePossible
+                              ? () {
+                                  mean != 0
+                                      ? showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return CheckOutDialog();
+                                          })
+                                      : Fluttertoast.showToast(
+                                          msg: "Cart empty",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white);
+                                }
+                              : () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (builder) {
+                                        return AlertDialog(
+                                          title: Text('No Allergies Provided'),
+                                          content: SingleChildScrollView(
+                                            child: Text(
+                                                'An allergy report must be provided before any products can be purchased'),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.popAndPushNamed(
+                                                    context, '/allergies');
+                                              },
+                                              child: Text('Provide Report'),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
                           child: Text(
                             "Check Out",
                             style: TextStyle(color: Colors.white),

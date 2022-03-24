@@ -46,6 +46,8 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
 
   var email;
 
+  bool purchasePossible = false;
+
   getSharedPreferenceData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
@@ -57,6 +59,22 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
   void initState() {
     super.initState();
     getSharedPreferenceData();
+    isPurchasePossible();
+  }
+
+  isPurchasePossible() async {
+    var uid = await getCurrentUID();
+    DocumentSnapshot ds =
+        await FirebaseFirestore.instance.collection("Allergies").doc(uid).get();
+    if (mounted)
+      setState(() {
+        purchasePossible = ds.exists;
+      });
+    if (purchasePossible == true) {
+      print('purchase possible');
+    } else {
+      print('purchase not possible');
+    }
   }
 
   @override
@@ -142,64 +160,112 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
                                                 .textTheme
                                                 .button,
                                           ),
-                                          onPressed: () async {
-                                            var uid = await getCurrentUID();
-                                            var date = DateTime.now();
-                                            // var productList = {
-                                            //   {
-                                            //     "Item name": widget.heroTag,
-                                            //     "product name": widget.name,
-                                            //     "Price": widget.price,
-                                            //     "Quantity": num.toString(),
-                                            //     "Progress": state,
-                                            //     "Date": date,
-                                            //   },
-                                            // };
-                                            try {
-                                              FirebaseFirestore.instance
-                                                  .collection('Cart')
-                                                  .add({
-                                                "Item name": widget.heroTag,
-                                                "product name": widget.name,
-                                                "Price": widget.price,
-                                                "Quantity": num.toString(),
-                                                "Progress": state,
-                                                "Uid": uid,
-                                                "Client email": email,
-                                                "Date": date,
-                                              }).then((value) {
-                                                Fluttertoast.showToast(
-                                                    msg: "Item added to cart",
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                    backgroundColor:
-                                                        Colors.grey[700],
-                                                    textColor: Colors.white);
+                                          onPressed: purchasePossible
+                                              ? () async {
+                                                  var uid =
+                                                      await getCurrentUID();
+                                                  var date = DateTime.now();
+                                                  // var productList = {
+                                                  //   {
+                                                  //     "Item name": widget.heroTag,
+                                                  //     "product name": widget.name,
+                                                  //     "Price": widget.price,
+                                                  //     "Quantity": num.toString(),
+                                                  //     "Progress": state,
+                                                  //     "Date": date,
+                                                  //   },
+                                                  // };
+                                                  try {
+                                                    FirebaseFirestore.instance
+                                                        .collection('Cart')
+                                                        .add({
+                                                      "Item name":
+                                                          widget.heroTag,
+                                                      "product name":
+                                                          widget.name,
+                                                      "Price": widget.price,
+                                                      "Quantity":
+                                                          num.toString(),
+                                                      "Progress": state,
+                                                      "Uid": uid,
+                                                      "Client email": email,
+                                                      "Date": date,
+                                                    }).then((value) {
+                                                      Fluttertoast.showToast(
+                                                          msg:
+                                                              "Item added to cart",
+                                                          toastLength: Toast
+                                                              .LENGTH_SHORT,
+                                                          gravity: ToastGravity
+                                                              .CENTER,
+                                                          backgroundColor:
+                                                              Colors.grey[700],
+                                                          textColor:
+                                                              Colors.white);
 
-                                                Navigator.pop(context);
-                                              }).timeout(Duration(seconds: 5),
-                                                      onTimeout: () {
-                                                setState(() {
-                                                  print("Error");
-                                                  Fluttertoast.showToast(
-                                                      msg:
-                                                          "Item will be added to the cart automatically"
-                                                          " when reconnected to a stable network connection",
-                                                      toastLength:
-                                                          Toast.LENGTH_LONG,
-                                                      gravity:
-                                                          ToastGravity.CENTER,
-                                                      backgroundColor:
-                                                          Colors.grey[700],
-                                                      textColor: Colors.white);
-                                                });
-                                              });
-                                            } on TimeoutException catch (e) {
-                                              print(e);
-                                            }
-                                          },
+                                                      Navigator.pop(context);
+                                                    }).timeout(
+                                                            Duration(
+                                                                seconds: 5),
+                                                            onTimeout: () {
+                                                      setState(() {
+                                                        print("Error");
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "Item will be added to the cart automatically"
+                                                                " when reconnected to a stable network connection",
+                                                            toastLength: Toast
+                                                                .LENGTH_LONG,
+                                                            gravity:
+                                                                ToastGravity
+                                                                    .CENTER,
+                                                            backgroundColor:
+                                                                Colors
+                                                                    .grey[700],
+                                                            textColor:
+                                                                Colors.white);
+                                                      });
+                                                    });
+                                                  } on TimeoutException catch (e) {
+                                                    print(e);
+                                                  }
+                                                }
+                                              : () {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (builder) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'No Allergies Provided'),
+                                                          content:
+                                                              SingleChildScrollView(
+                                                            child: Text(
+                                                                'An allergy report must be provided before any products can be purchased'),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context),
+                                                              child: Text(
+                                                                  'Cancel'),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Navigator
+                                                                    .popAndPushNamed(
+                                                                        context,
+                                                                        '/allergies');
+                                                              },
+                                                              child: Text(
+                                                                  'Provide Report'),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      });
+                                                },
                                         ),
                                       ),
                               ),

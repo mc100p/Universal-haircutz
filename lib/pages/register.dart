@@ -118,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                             SizedBox(height: 15.0),
                             new TextFormField(
                               decoration: textFieldInputDecoration(
-                                  context, "Enter Your Address:"),
+                                  context, "Enter Address:"),
                               validator: (value) => value!.isEmpty
                                   ? 'Enter a valid address'
                                   : null,

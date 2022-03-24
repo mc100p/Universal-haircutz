@@ -88,6 +88,19 @@ class AppointmentList extends StatefulWidget {
 }
 
 class _AppointmentListState extends State<AppointmentList> {
+  var uid;
+
+  getUID() async {
+    uid = await getCurrentUID();
+    return uid;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUID();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -110,6 +123,11 @@ class _AppointmentListState extends State<AppointmentList> {
                 physics: BouncingScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
+                  DocumentSnapshot point = snapshot.data!.docs[index];
+
+                  if (point.get('id') != uid) {
+                    return Container();
+                  }
                   return Padding(
                     padding: EdgeInsets.fromLTRB(12.0, 25, 12.0, 0),
                     child: Shimmer(

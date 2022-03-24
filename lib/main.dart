@@ -10,6 +10,7 @@ import 'package:universalhaircutz/utils/provider.dart';
 import 'package:universalhaircutz/utils/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:universalhaircutz/utils/theme.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> main() async {
   final title = 'Universal Haircutz';
@@ -17,10 +18,10 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessaginBackgroundHandler);
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<
-  //         AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
   String? login = prefs.getString('email');
   String? role = prefs.getString('role');
 
@@ -50,15 +51,15 @@ Future<void> _firebaseMessaginBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
 }
 
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
-//   'high_importance_channel',
-//   'High Importance Notifications',
-//   // 'This channel is used for important notifications',
-//   importance: Importance.high,
-// );
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel',
+  'High Importance Notifications',
+  // 'This channel is used for important notifications',
+  importance: Importance.high,
+);
 
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class MyApp extends StatelessWidget {
   const MyApp({

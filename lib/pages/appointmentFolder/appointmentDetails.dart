@@ -42,9 +42,27 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
 
   bool button = false;
 
+  bool purchasePossible = false;
+
+  isPurchasePossible() async {
+    var uid = await getCurrentUID();
+    DocumentSnapshot ds =
+        await FirebaseFirestore.instance.collection("Allergies").doc(uid).get();
+    if (mounted)
+      setState(() {
+        purchasePossible = ds.exists;
+      });
+    if (purchasePossible == true) {
+      print('purchase possible');
+    } else {
+      print('purchase not possible');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    isPurchasePossible();
     tabController = new TabController(length: 2, vsync: this);
   }
 
@@ -216,74 +234,125 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
                                                     color: Colors.white,
                                                     fontFamily: 'Arial'),
                                               ),
-                                              onPressed: () async {
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  print(appointmentTime);
+                                              onPressed: purchasePossible
+                                                  ? () async {
+                                                      if (_formKey.currentState!
+                                                          .validate()) {
+                                                        print(appointmentTime);
 
-                                                  var id =
-                                                      await getCurrentUID();
+                                                        var id =
+                                                            await getCurrentUID();
 
-                                                  var date = FieldValue
-                                                      .serverTimestamp();
-                                                  if (appointmentTime == null) {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(errorDisplay(
-                                                            "Please select a convenient time"));
-                                                  } else {
-                                                    var appointmentObject = {
-                                                      'Appointment Time':
-                                                          appointmentTime,
-                                                      'Barber name': this
-                                                          .widget
-                                                          .barberName,
-                                                      'Barber email': this
-                                                          .widget
-                                                          .barberEmail,
-                                                      'Service':
-                                                          this.widget.name,
-                                                      'Cost': this.widget.price,
-                                                      'Image of serice':
-                                                          this.widget.heroTag,
-                                                      'id': id,
-                                                      'date': date,
-                                                    };
+                                                        var date = FieldValue
+                                                            .serverTimestamp();
+                                                        if (appointmentTime ==
+                                                            null) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                                  errorDisplay(
+                                                                      "Please select a convenient time"));
+                                                        } else {
+                                                          var appointmentObject =
+                                                              {
+                                                            'Appointment Time':
+                                                                appointmentTime,
+                                                            'Barber name': this
+                                                                .widget
+                                                                .barberName,
+                                                            'Barber email': this
+                                                                .widget
+                                                                .barberEmail,
+                                                            'Service': this
+                                                                .widget
+                                                                .name,
+                                                            'Cost': this
+                                                                .widget
+                                                                .price,
+                                                            'Image of serice':
+                                                                this
+                                                                    .widget
+                                                                    .heroTag,
+                                                            'id': id,
+                                                            'date': date,
+                                                          };
 
-                                                    FirebaseFirestore.instance
-                                                        .collection(
-                                                            'Appointments')
-                                                        .add(appointmentObject)
-                                                        .then((value) {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                              successDisplay(
-                                                                  "Appointment Saved!"));
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'Appointments')
+                                                              .add(
+                                                                  appointmentObject)
+                                                              .then((value) {
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                                    successDisplay(
+                                                                        "Appointment Saved!"));
 
-                                                      Navigator.of(context)
-                                                          .pushNamedAndRemoveUntil(
-                                                              '/userHomePage',
-                                                              (Route<dynamic>
-                                                                      route) =>
-                                                                  false);
-                                                    }).timeout(
-                                                            Duration(
-                                                                seconds: 5),
-                                                            onTimeout: () {
-                                                      setState(() {
-                                                        button = false;
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                                errorDisplay(
-                                                                    "Failed to book appointment try again"));
-                                                        print("Error");
-                                                      });
-                                                    });
-                                                  }
-                                                }
-                                              },
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushNamedAndRemoveUntil(
+                                                                    '/userHomePage',
+                                                                    (Route<dynamic>
+                                                                            route) =>
+                                                                        false);
+                                                          }).timeout(
+                                                                  Duration(
+                                                                      seconds:
+                                                                          5),
+                                                                  onTimeout:
+                                                                      () {
+                                                            setState(() {
+                                                              button = false;
+                                                              ScaffoldMessenger
+                                                                      .of(
+                                                                          context)
+                                                                  .showSnackBar(
+                                                                      errorDisplay(
+                                                                          "Failed to book appointment try again"));
+                                                              print("Error");
+                                                            });
+                                                          });
+                                                        }
+                                                      }
+                                                    }
+                                                  : () {
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (builder) {
+                                                            return AlertDialog(
+                                                              title: Text(
+                                                                  'No Allergies Provided'),
+                                                              content:
+                                                                  SingleChildScrollView(
+                                                                child: Text(
+                                                                    'An allergy report must be provided before any products can be purchased'),
+                                                              ),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(
+                                                                          context),
+                                                                  child: Text(
+                                                                      'Cancel'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    Navigator.popAndPushNamed(
+                                                                        context,
+                                                                        '/allergies');
+                                                                  },
+                                                                  child: Text(
+                                                                      'Provide Report'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          });
+                                                    },
                                             ),
                                           ),
                                   ),

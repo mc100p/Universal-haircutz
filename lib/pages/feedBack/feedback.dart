@@ -16,7 +16,6 @@ class _FeedBackHelpState extends State<FeedBackHelp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: Text('Feed Back'),
       ),
