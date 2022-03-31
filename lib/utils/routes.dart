@@ -6,6 +6,7 @@ import 'package:universalhaircutz/pages/adminPanel/invertory.dart';
 import 'package:universalhaircutz/pages/allergies/allergies.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
+import 'package:universalhaircutz/pages/camera/camera.dart';
 import 'package:universalhaircutz/pages/feedBack/feedback.dart';
 import 'package:universalhaircutz/pages/hairProducts/cart.dart';
 import 'package:universalhaircutz/pages/hairProducts/hairProdDetails.dart';
@@ -25,6 +26,9 @@ import 'package:universalhaircutz/pages/termsConditions/terms.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case '/camera':
+        return MaterialPageRoute(builder: ((context) => Camera()));
+
       case '/allergies':
         return MaterialPageRoute(builder: ((context) => Allergies()));
       case '/inventory':
@@ -64,7 +68,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (context) => SignUp());
 
       case '/userHomePage':
-        return MaterialPageRoute(builder: (context) => MyHomePage());
+        return MaterialPageRoute(builder: (context) => Pages());
 
       case '/resetPassword':
         return MaterialPageRoute(builder: (context) => PasswordReset());

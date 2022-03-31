@@ -21,19 +21,6 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Schedule Appointment")),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.add, color: Colors.white),
-      //   key: keyButton,
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   onPressed: () {
-      //     showDialog(
-      //       context: context,
-      //       builder: (context) {
-      //         return FirestoreListView();
-      //       },
-      //     );
-      //   },
-      // ),
       body: Container(
         child: FutureBuilder(
           future: getCurrentUID(),

@@ -94,15 +94,6 @@ class _AllergiesState extends State<Allergies> {
       print('not present');
     }
   }
-  // Stream<QuerySnapshot> getUsersDataStreamSnapshot(
-  //     ) async* {
-  //   // ignore: unused_local_variable
-  //   final uid = await getCurrentUser();
-  //   yield* FirebaseFirestore.instance.collection('Allergies').snapshots();
-
-  //   print('uid: $uid');
-  // }
-
 }
 
 class AllergiesList extends StatefulWidget {
@@ -185,6 +176,13 @@ class _AllergiesListState extends State<AllergiesList> {
                             children: [
                               Row(
                                 children: [
+                                  Text('Doctor Name: ' +
+                                      '${this.widget.documents![index]['Doctor Name']}'),
+                                ],
+                              ),
+                              SizedBox(height: size.height * 0.01),
+                              Row(
+                                children: [
                                   Text('Doctor Number: ' +
                                       '${this.widget.documents![index]['Doctor Number']}'),
                                 ],
@@ -199,10 +197,18 @@ class _AllergiesListState extends State<AllergiesList> {
                               SizedBox(height: size.height * 0.01),
                               Row(
                                 children: [
+                                  Text('Next of Kin: ' +
+                                      '${this.widget.documents![index]['Next of Kin Number']}'),
+                                ],
+                              ),
+                              SizedBox(height: size.height * 0.01),
+                              Row(
+                                children: [
                                   Text(
                                     'Allergies: ' +
                                         '${this.widget.documents![index]['Allergies']}',
-                                    maxLines: 3,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -243,8 +249,10 @@ class _FirestoreListViewState extends State<FirestoreListView>
   String? allergies,
       // ignore: unused_field
       _errorMessage,
+      doctorName,
       doctorNumber,
       nextOfKin,
+      nextOfKinNumber,
       clientName,
       clientEmail = '';
 
@@ -255,9 +263,11 @@ class _FirestoreListViewState extends State<FirestoreListView>
     getCurrentUserData();
 
     if (widget.document != null) {
+      doctorName = this.widget.document!['Doctor Name'];
       doctorNumber = this.widget.document!['Doctor Number'];
       nextOfKin = this.widget.document!['Next of Kin'];
       allergies = this.widget.document!['Allergies'];
+      nextOfKinNumber = this.widget.document!['Next of Kin Number'];
     }
   }
 
@@ -374,7 +384,7 @@ class _FirestoreListViewState extends State<FirestoreListView>
       body: SingleChildScrollView(
         reverse: true,
         child: Container(
-          height: MediaQuery.of(context).size.height,
+          //height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             borderRadius: BorderRadius.only(
@@ -400,6 +410,16 @@ class _FirestoreListViewState extends State<FirestoreListView>
                       SizedBox(height: size.height * 0.12),
                       TextFormField(
                         decoration: components.textFieldInputDecoration(
+                            context, "Doctor's name"),
+                        onSaved: (value) => doctorName = value,
+                        initialValue: doctorName,
+                        validator: (value) =>
+                            value!.isEmpty ? "Enter your doctor's name" : null,
+                        keyboardType: TextInputType.name,
+                      ),
+                      SizedBox(height: size.height * 0.05),
+                      TextFormField(
+                        decoration: components.textFieldInputDecoration(
                             context, "Doctor's contact number"),
                         onSaved: (value) => doctorNumber = value,
                         initialValue: doctorNumber,
@@ -414,9 +434,20 @@ class _FirestoreListViewState extends State<FirestoreListView>
                         onSaved: (value) => nextOfKin = value,
                         initialValue: nextOfKin,
                         validator: (value) => value!.isEmpty
-                            ? 'Enter a person to be contact incase of emergency'
+                            ? 'Enter the name of a person to be contacted incase of an emergency'
                             : null,
                         keyboardType: TextInputType.text,
+                      ),
+                      SizedBox(height: size.height * 0.05),
+                      TextFormField(
+                        decoration: components.textFieldInputDecoration(
+                            context, 'Next of kin number'),
+                        onSaved: (value) => nextOfKinNumber = value,
+                        initialValue: nextOfKinNumber,
+                        validator: (value) => value!.isEmpty
+                            ? "Enter a person's # to be contacted incase of an emergency"
+                            : null,
+                        keyboardType: TextInputType.number,
                       ),
                       SizedBox(height: size.height * 0.05),
                       TextFormField(
@@ -474,8 +505,11 @@ class _FirestoreListViewState extends State<FirestoreListView>
                                                   "Client Name": clientName,
                                                   "Client Email": clientEmail,
                                                   "Allergies": allergies,
+                                                  "Doctor Name": doctorName,
                                                   "Doctor Number": doctorNumber,
                                                   "Next of Kin": nextOfKin,
+                                                  "Next of Kin Number":
+                                                      nextOfKinNumber,
                                                   "Date": date,
                                                 };
                                                 widget.document == null

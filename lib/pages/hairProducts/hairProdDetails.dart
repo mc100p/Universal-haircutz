@@ -89,7 +89,6 @@ class _HairProductsDetailsState extends State<HairProductsDetails> {
           icon: Icon(Icons.arrow_back_ios),
           color: Colors.white,
         ),
-        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0.0,
         title: Text(
           '${this.widget.name}',

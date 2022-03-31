@@ -15,6 +15,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 Future<void> main() async {
   final title = 'Universal Haircutz';
   WidgetsFlutterBinding.ensureInitialized();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessaginBackgroundHandler);
@@ -106,7 +107,7 @@ class MyApp extends StatelessWidget {
   Widget getState(value) {
     if (login != null) {
       if (role == "User") {
-        value = MyHomePage();
+        value = Pages();
       } else if (role == "Admin") {
         value = AdminHomePage();
       }

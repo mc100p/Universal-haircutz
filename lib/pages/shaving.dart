@@ -11,6 +11,11 @@ class Shaving extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Shaving"),
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.pushNamed(context, '/camera'),
+              icon: Icon(Icons.camera_alt))
+        ],
       ),
       body: Container(
         height: size.height,
