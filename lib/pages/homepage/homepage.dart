@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:universalhaircutz/pages/allergies/allergies.dart';
+import 'package:universalhaircutz/pages/camera/camera.dart';
 import 'package:universalhaircutz/pages/drawer/drawer.dart';
 import 'package:universalhaircutz/pages/reservations/reservation.dart';
 import 'package:universalhaircutz/services/auth.dart';
@@ -53,15 +54,15 @@ class _PagesState extends State<Pages> {
             ),
             icon: Icon(CustomIcons.appointments, color: Colors.white),
           ),
-          // BottomNavyBarItem(
-          //   activeColor: Theme.of(context).primaryColor,
-          //   inactiveColor: null,
-          //   title: Text(
-          //     "Profile",
-          //     style: TextStyle(color: Colors.white),
-          //   ),
-          //   icon: Icon(CustomIcons.profile, color: Colors.white),
-          // ),
+          BottomNavyBarItem(
+            activeColor: Theme.of(context).primaryColor,
+            inactiveColor: null,
+            title: Text(
+              "Camera",
+              style: TextStyle(color: Colors.white),
+            ),
+            icon: Icon(Icons.camera_alt_rounded, color: Colors.white),
+          ),
           BottomNavyBarItem(
             activeColor: Theme.of(context).primaryColor,
             inactiveColor: null,
@@ -81,7 +82,7 @@ class _PagesState extends State<Pages> {
         children: <Widget>[
           MyHomePage(),
           Appointment(),
-          //Profile(),
+          Camera(),
           Allergies(),
         ],
       ),

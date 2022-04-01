@@ -450,6 +450,48 @@ class _CheckOutDialogState extends State<CheckOutDialog>
                               ),
                             ),
                             Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderRadius: new BorderRadius.all(
+                                              new Radius.circular(10.0))),
+                                      hintText: "000",
+                                      hintStyle: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Please enter your CVV'
+                                      : null,
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50.0),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 50,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderRadius: new BorderRadius.all(
+                                              new Radius.circular(10.0))),
+                                      hintText: "2022/16/07",
+                                      hintStyle: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Please enter a valid time'
+                                      : null,
+                                  keyboardType: TextInputType.datetime,
+                                ),
+                              ),
+                            ),
+                            Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Container(
                                 width: MediaQuery.of(context).size.width - 50,

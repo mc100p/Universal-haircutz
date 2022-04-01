@@ -36,14 +36,9 @@ class DrawerClass extends StatelessWidget {
                 onTap: () => Navigator.popAndPushNamed(context, '/location'),
                 trailing: Icon(Icons.location_on),
               ),
-              ListTile(
-                title: Text('Allergies Update'),
-                onTap: () => Navigator.popAndPushNamed(context, '/allergies'),
-                trailing: Icon(Icons.sick),
-              ),
               Seperator(),
               ListTile(
-                title: Text("Feed back"),
+                title: Text("Feedback"),
                 onTap: () => Navigator.popAndPushNamed(context, '/feedBack'),
                 trailing: Icon(Icons.help),
               ),
