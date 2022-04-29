@@ -107,9 +107,9 @@ class MyApp extends StatelessWidget {
 
   Widget getState(value) {
     if (login != null) {
-      if (role == "User") {
+      if (role == "Userside") {
         value = Pages();
-      } else if (role == "Admin") {
+      } else if (role == "Adminside") {
         value = AdminHomePage();
       }
     } else {
