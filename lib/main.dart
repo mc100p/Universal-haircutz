@@ -95,8 +95,7 @@ class MyApp extends StatelessWidget {
           // theme: ThemeData(
           //   primaryColor: Color(0xFFFC9900),
           // ),
-          home: Container(),
-          //getState(login),
+          home: getState(login),
           themeMode: themeProvider.themeMode,
           theme: MyThemes.lightTheme,
           darkTheme: MyThemes.darkTheme,

@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:164447752896:android:1e5be7ee10055849d11325",
+        "mobilesdk_app_id": "1:164447752896:android:cc9f180bfafd44b5d11325",
         "android_client_info": {
           "package_name": "com.example.universalhaircutz"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "164447752896-s9qm7kjnsm7n9lnd65avns487csa3rid.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.universalhaircutz",
+            "certificate_hash": "ad1e33ff355a3be602eb542e54498388c5ea4c40"
+          }
+        },
         {
           "client_id": "164447752896-s8ngihr67uoibpl8dhqggqjrnivcbpau.apps.googleusercontent.com",
           "client_type": 3
@@ -20,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD2BJaE53u49bOdojlLlj0eq34Iap66Fbc"
+          "current_key": "AIzaSyAbJFrelGS8BnOBfMAaI-m2Kx9WhpXcJ_0"
         }
       ],
       "services": {
@@ -29,13 +37,6 @@
             {
               "client_id": "164447752896-s8ngihr67uoibpl8dhqggqjrnivcbpau.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "164447752896-4gl8nosukv3d1he7nooo21rr17n5cpn4.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.universalhaircutz"
-              }
             }
           ]
         }

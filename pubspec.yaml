@@ -37,6 +37,7 @@ dependencies:
   flutter_local_notifications: ^9.4.0
   flutter_native_splash: ^1.2.4
   flutter_slidable: ^1.2.0
+  flutter_svg: ^1.0.3
   fluttertoast: ^8.0.8
   form_field_validator: ^1.1.0
   google_maps_flutter: ^2.1.1

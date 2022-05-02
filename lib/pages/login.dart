@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universalhaircutz/services/auth.dart';
 import 'package:universalhaircutz/utils/widget.dart';
 
@@ -179,6 +180,25 @@ class LoginState extends State<Login> with SingleTickerProviderStateMixin {
                                       fontSize: 18.0,
                                     ),
                                   ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 120.0, vertical: 50.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SvgPicture.asset(
+                                  "images/facebookLogo.svg",
+                                  height: 30,
+                                  width: 30,
+                                ),
+                                SvgPicture.asset(
+                                  "images/googleLogo.svg",
+                                  height: 30,
+                                  width: 30,
                                 ),
                               ],
                             ),
