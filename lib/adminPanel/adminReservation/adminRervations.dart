@@ -4,57 +4,109 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:universalhaircutz/adminPanel/adminReservation/adminViewReservation.dart';
+import 'package:universalhaircutz/adminPanel/adminReservation/createReservations.dart';
+import 'package:universalhaircutz/adminPanel/adminReservation/reservationUtilities.dart';
 import 'package:universalhaircutz/services/auth.dart';
 import 'package:intl/intl.dart';
 
-class AdminReservations extends StatelessWidget {
+class AdminReservations extends StatefulWidget {
   const AdminReservations({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Client Appointments'),
-      ),
-      body: Container(
-        child: FutureBuilder(
-          future: getCurrentUID(),
-          builder: (context, AsyncSnapshot snapshot) {
-            return StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Appointments')
-                  //.doc(snapshot.data)
-                  // .where("User", isEqualTo: snapshot.data)
-                  // .orderBy("Appointment", descending: true)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData)
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                else if (snapshot.data!.docs.isEmpty)
-                  return Center(
-                    child: Text(
-                      "No appointments made.",
-                    ),
-                  );
-                return AppointmentList(
-                  documents: snapshot.data!.docs,
-                );
-              },
-            );
-          },
-        ),
-      ),
-    );
+  State<AdminReservations> createState() => _AdminReservationsState();
+}
+
+class _AdminReservationsState extends State<AdminReservations>
+    with SingleTickerProviderStateMixin {
+  late TabController tabController;
+
+  String? barbersName;
+
+  bool search = false;
+
+  int currentIndex = 0;
+
+  get getData async {
+    String uid = await getCurrentUID();
+    final DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic>? fetchDoc = snapshot.data() as Map<String, dynamic>?;
+
+      setState(() {
+        barbersName = fetchDoc?['FullName'];
+      });
+    }
   }
 
-  Stream<QuerySnapshot> getUsersDataStreamSnapshot(
-      BuildContext context) async* {
-    // ignore: unused_local_variable
-    final uid = await getCurrentUser();
-    yield* FirebaseFirestore.instance.collection('Appointments').snapshots();
+  @override
+  void initState() {
+    super.initState();
+    tabController = new TabController(length: 2, vsync: this);
+    getData;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("Appointments")
+            .where("barbers name", isEqualTo: barbersName)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData)
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Client Appointments'),
+              actions: [
+                if (currentIndex == 1) ...[
+                  IconButton(
+                      onPressed: () => showSearch(
+                          context: context,
+                          delegate: FeedBackSearchList(
+                              snapshot.data!.docs, "Appointments")),
+                      icon: Icon(Icons.search))
+                ]
+              ],
+              bottom: TabBar(
+                controller: tabController,
+                labelColor: Colors.white,
+                onTap: (index) {
+                  print(index);
+                  if (tabController.indexIsChanging) {
+                    setState(() {
+                      currentIndex = tabController.index;
+                    });
+                  }
+                },
+                tabs: <Tab>[
+                  Tab(text: "View Appointments"),
+                  Tab(text: "Appointments"),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                ViewAppointments(barbersName: barbersName!),
+                Appointments(
+                    tabController: tabController, barbersName: barbersName!),
+              ],
+            ),
+          );
+        });
   }
 }
 
@@ -98,8 +150,8 @@ class _AppointmentListState extends State<AppointmentList> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.data == null)
-              return Center(child: CircularProgressIndicator());
+            // if (snapshot.data == null)
+            //   return Center(child: CircularProgressIndicator());
 
             return Scrollbar(
               child: ListView.builder(
@@ -479,10 +531,10 @@ class _FirestoreListViewState extends State<FirestoreListView>
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('Barbers').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData)
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+          // if (!snapshot.hasData)
+          //   return const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
           // ignore: unused_local_variable
           var length = snapshot.data!.docs.length;
 

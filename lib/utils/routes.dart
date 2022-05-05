@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:universalhaircutz/pages/adminPanel/AdminHomePage.dart';
+import 'package:universalhaircutz/adminPanel/AdminHomePage.dart';
+import 'package:universalhaircutz/adminPanel/adminReservation/adminRervations.dart';
+import 'package:universalhaircutz/adminPanel/adminReservation/createReservations.dart';
+import 'package:universalhaircutz/adminPanel/invertory.dart';
 import 'package:universalhaircutz/pages/about/about.dart';
-import 'package:universalhaircutz/pages/adminPanel/adminRervations.dart';
-import 'package:universalhaircutz/pages/adminPanel/invertory.dart';
 import 'package:universalhaircutz/pages/allergies/allergies.dart';
 import 'package:universalhaircutz/pages/appointment.dart';
 import 'package:universalhaircutz/pages/appointmentFolder/appointmentDetails.dart';
@@ -26,6 +27,12 @@ import 'package:universalhaircutz/pages/termsConditions/terms.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case '/reservationDetails':
+        ReservationList args = settings.arguments as ReservationList;
+        return MaterialPageRoute(
+            builder: ((context) => ReservationList(
+                  documents: args.documents,
+                )));
       case '/camera':
         return MaterialPageRoute(builder: ((context) => Camera()));
 
@@ -92,6 +99,7 @@ class RouteGenerator {
             heroTag: args.heroTag,
             name: args.name,
             cost: args.cost,
+            tasks: args.tasks,
           ),
         );
 
@@ -119,6 +127,7 @@ class RouteGenerator {
             barberEmail: args.barberEmail,
             barberName: args.barberName,
             barberImage: args.barberImage,
+            tasks: args.tasks,
           ),
         );
       default:

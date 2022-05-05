@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:universalhaircutz/models/appointmentModel.dart';
+import 'package:universalhaircutz/models/reservedAppointment.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class Appointment extends StatefulWidget {
@@ -27,7 +29,7 @@ class _AppointmentState extends State<Appointment> {
           builder: (context, AsyncSnapshot snapshot) {
             return StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('Appointments')
+                  .collection('Reserved Appointments')
                   //.doc(snapshot.data)
                   // .where("User", isEqualTo: snapshot.data)
                   // .orderBy("Appointment", descending: true)
@@ -53,13 +55,6 @@ class _AppointmentState extends State<Appointment> {
         ),
       ),
     );
-  }
-
-  Stream<QuerySnapshot> getUsersDataStreamSnapshot(
-      BuildContext context) async* {
-    // ignore: unused_local_variable
-    final uid = await getCurrentUser();
-    yield* FirebaseFirestore.instance.collection('Appointments').snapshots();
   }
 }
 
@@ -95,10 +90,12 @@ class _AppointmentListState extends State<AppointmentList> {
       builder: (context, AsyncSnapshot snapshot) {
         return StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('Appointments')
+              .collection('Reserved Appointments')
               // .doc(snapshot.data)
               // .collection("Appointments")
-              // .where("User", isEqualTo: snapshot.data)
+              .where("uid", isEqualTo: uid)
+              .where("completed", isEqualTo: false)
+
               // .orderBy("Appointment", descending: true)
               .snapshots(),
           builder:
@@ -111,10 +108,10 @@ class _AppointmentListState extends State<AppointmentList> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   DocumentSnapshot point = snapshot.data!.docs[index];
+                  ReservedTimeModel reservedTimeModel =
+                      ReservedTimeModel.fromJson(
+                          point.data() as Map<String, dynamic>);
 
-                  if (point.get('id') != uid) {
-                    return Container();
-                  }
                   return Padding(
                     padding: EdgeInsets.fromLTRB(12.0, 25, 12.0, 0),
                     child: Shimmer(
@@ -137,16 +134,6 @@ class _AppointmentListState extends State<AppointmentList> {
                         child: ListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: 16.0),
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return FirestoreListView(
-                                  document: this.widget.documents![index],
-                                );
-                              },
-                            );
-                          },
                           title: Align(
                             alignment: Alignment.center,
                             child: Column(
@@ -185,13 +172,29 @@ class _AppointmentListState extends State<AppointmentList> {
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
-                                        Text(
-                                          '${this.widget.documents![index]['Appointment Time'].toDate()}',
-                                          style: TextStyle(
-                                            fontFamily:
-                                                'PlayfairDisplay - Regular',
-                                            fontWeight: FontWeight.w300,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${DateFormat.yMMMMd().format(reservedTimeModel.starts!.toDate())}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Text(" @"),
+                                            Text(
+                                              ' ${DateFormat('kk:mm').format(reservedTimeModel.starts!.toDate())}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                            Text(" - "),
+                                            Text(
+                                              '${DateFormat('kk:mm').format(reservedTimeModel.ends!.toDate())}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -201,37 +204,12 @@ class _AppointmentListState extends State<AppointmentList> {
                                           "Barber Selected: ",
                                           style: TextStyle(
                                             fontSize: 15.0,
-                                            fontFamily:
-                                                'PlayfairDisplay  - Regular',
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         Text(
-                                          '${this.widget.documents![index]['Barber name']}',
+                                          '${reservedTimeModel.barbersName}',
                                           style: TextStyle(
-                                            fontFamily:
-                                                'PlayfairDisplay - Regular',
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Barber email: ",
-                                          style: TextStyle(
-                                            fontSize: 15.0,
-                                            fontFamily:
-                                                'PlayfairDisplay  - Regular',
-                                            fontWeight: FontWeight.w800,
-                                          ),
-                                        ),
-                                        Text(
-                                          '${this.widget.documents![index]['Barber email']}',
-                                          style: TextStyle(
-                                            fontFamily:
-                                                'PlayfairDisplay - Regular',
                                             fontWeight: FontWeight.w300,
                                           ),
                                         ),
@@ -243,16 +221,12 @@ class _AppointmentListState extends State<AppointmentList> {
                                           "Cost: ",
                                           style: TextStyle(
                                             fontSize: 15.0,
-                                            fontFamily:
-                                                'PlayfairDisplay  - Regular',
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         Text(
-                                          '${this.widget.documents![index]['Cost']}',
+                                          '${reservedTimeModel.cost}',
                                           style: TextStyle(
-                                            fontFamily:
-                                                'PlayfairDisplay - Regular',
                                             fontWeight: FontWeight.w300,
                                           ),
                                         ),
@@ -261,38 +235,21 @@ class _AppointmentListState extends State<AppointmentList> {
                                     Row(
                                       children: [
                                         Text(
-                                          " Service: ",
+                                          "Service: ",
                                           style: TextStyle(
                                             fontSize: 15.0,
-                                            fontFamily:
-                                                'PlayfairDisplay  - Regular',
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         Text(
-                                          '${this.widget.documents![index]['Service']}',
+                                          '${reservedTimeModel.task}',
                                           style: TextStyle(
-                                            fontFamily:
-                                                'PlayfairDisplay - Regular',
                                             fontWeight: FontWeight.w300,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ],
-                                ),
-                                Image(
-                                  image: NetworkImage(
-                                      '${this.widget.documents![index]['Image of serice']}'),
-                                  loadingBuilder: (context, child, progress) {
-                                    return progress == null
-                                        ? child
-                                        : Center(
-                                            child: CircularProgressIndicator());
-                                  },
-                                  fit: BoxFit.contain,
-                                  height: 50.0,
-                                  width: 50.0,
                                 ),
                               ],
                             ),

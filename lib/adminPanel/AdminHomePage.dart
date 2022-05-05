@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universalhaircutz/pages/adminPanel/adminComponents.dart';
-import 'package:universalhaircutz/pages/adminPanel/viewInventory.dart';
+import 'package:universalhaircutz/adminPanel/adminComponents.dart';
+import 'package:universalhaircutz/adminPanel/viewInventory.dart';
 import 'package:universalhaircutz/services/auth.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -260,7 +260,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             onPressed: () => Navigator.pushNamed(
                                 context, '/adminReservations'),
                             child: Text(
-                              'View Appointments',
+                              'Appointments',
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.w600,
@@ -272,7 +272,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       ),
                     ),
                     SliverPadding(
-                      padding: const EdgeInsets.only(top: 50),
+                      padding: const EdgeInsets.only(top: 20),
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(top: 30),
                     ),
                     ViewInventory(
                       uid: uid,

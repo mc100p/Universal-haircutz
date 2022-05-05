@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:universalhaircutz/services/auth.dart';
-import 'package:universalhaircutz/utils/widget.dart';
 
 class AppointmentSetUp extends StatefulWidget {
   final heroTag;
@@ -12,16 +15,18 @@ class AppointmentSetUp extends StatefulWidget {
   final barberName;
   final barberEmail;
   final barberImage;
+  final tasks;
 
-  const AppointmentSetUp({
-    Key? key,
-    this.heroTag,
-    this.name,
-    this.price,
-    this.barberName,
-    this.barberEmail,
-    this.barberImage,
-  }) : super(key: key);
+  const AppointmentSetUp(
+      {Key? key,
+      this.heroTag,
+      this.name,
+      this.price,
+      this.barberName,
+      this.barberEmail,
+      this.barberImage,
+      this.tasks})
+      : super(key: key);
   @override
   State<AppointmentSetUp> createState() => _AppointmentSetUpState();
 }
@@ -31,6 +36,8 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
   final format = DateFormat("yyyy-MM-dd - hh:mm ");
 
   DateTime? appointmentTime;
+
+  bool noData = false;
 
   int savedCount = 0;
 
@@ -43,6 +50,21 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
   bool button = false;
 
   bool purchasePossible = false;
+
+  bool isloading = false;
+
+  MeetingDataSource? events;
+
+  String deviceToken = '';
+
+  get getToken async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print('token: ' + token!);
+    setState(() {
+      deviceToken = token;
+    });
+    return token;
+  }
 
   isPurchasePossible() async {
     var uid = await getCurrentUID();
@@ -64,6 +86,46 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
     super.initState();
     isPurchasePossible();
     tabController = new TabController(length: 2, vsync: this);
+    getDataFromFireStore().then((results) {
+      SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+        setState(() {
+          isloading = false;
+        });
+      });
+    });
+  }
+
+  Future<void> getDataFromFireStore() async {
+    var snapShotsValue = await FirebaseFirestore.instance
+        .collection("Appointments")
+        .where("barbers name", isEqualTo: this.widget.barberName)
+        .where("task", isEqualTo: this.widget.tasks)
+        .where("reserved by", isEqualTo: "")
+        .get();
+
+    if (snapShotsValue.docs.isEmpty) {
+      setState(() {
+        noData = true;
+      });
+    }
+
+    List<Meeting> list = snapShotsValue.docs.map((e) {
+      print("Start time: ${e.data()['starting'].toDate()}");
+      print("End time: ${e.data()['ends'].toDate()}");
+
+      DateTime starting = e.data()['starting'].toDate();
+
+      DateTime ending = e.data()['ends'].toDate();
+      return Meeting(
+          eventName: "${e.data()['task']}",
+          from: starting,
+          to: ending,
+          background: Theme.of(context).primaryColor,
+          isAllDay: false);
+    }).toList();
+    setState(() {
+      events = MeetingDataSource(list);
+    });
   }
 
   @override
@@ -74,397 +136,207 @@ class _AppointmentSetUpState extends State<AppointmentSetUp>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${this.widget.barberName}'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: size.height * 0.45,
-              child: Image(
-                image: NetworkImage(
-                  this.widget.barberImage,
+    return isloading
+        ? Center(child: CircularProgressIndicator())
+        : noData
+            ? Scaffold(
+                appBar: AppBar(),
+                body: Center(
+                  child: Text("No reservations avaliable"),
                 ),
-                loadingBuilder: (context, child, progress) {
-                  return progress == null ? child : CircularProgressIndicator();
-                },
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Icon(Icons.broken_image_outlined),
-                  );
-                },
-                fit: BoxFit.cover,
-                height: 75.0,
-                width: 75.0,
-              ),
-            ),
-            Container(
-              color: Theme.of(context).cardColor,
-              width: double.infinity,
-              child: TabBar(
-                labelStyle: TextStyle(color: Colors.white),
-                unselectedLabelColor: Colors.grey,
-                indicator: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+              )
+            : Scaffold(
+                appBar: AppBar(
+                  title: Text('${this.widget.barberName}'),
                 ),
-                controller: tabController,
-                tabs: <Tab>[
-                  Tab(
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Information Form",
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          "Details",
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                body: SfCalendar(
+                  view: CalendarView.month,
+                  dataSource: events,
+                  onTap: calendarTapped,
+                  onSelectionChanged: (details) {},
+                  monthViewSettings: const MonthViewSettings(
+                      showAgenda: true,
+                      appointmentDisplayMode:
+                          MonthAppointmentDisplayMode.appointment),
+                ),
+              );
+  }
+
+  void calendarTapped(CalendarTapDetails details) {
+    if (details.targetElement == CalendarElement.appointment ||
+        details.targetElement == CalendarElement.agenda) {
+      final Meeting _meeting = details.appointments![0];
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Appointment details'),
+            content: SingleChildScrollView(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Service: ${_meeting.eventName!}'),
+                Row(
+                  children: [
+                    Text(
+                        'Start: ${DateFormat.yMMMMd().format(_meeting.from!)}'),
+                    Text(" @"),
+                    Text(' ${DateFormat('kk:mm').format(_meeting.from!)}')
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('Ends: ${DateFormat.yMMMMd().format(_meeting.to)}'),
+                    Text(" @"),
+                    Text(' ${DateFormat('kk:mm').format(_meeting.to)}')
+                  ],
+                ),
+              ],
+            )),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'),
               ),
-            ),
-            Container(
-              height: size.height,
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: size.height * 0.08),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 50,
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  Text('Select a time for appointment'),
-                                  Divider(
-                                    thickness: 1.8,
-                                  ),
-                                  SizedBox(height: size.height * 0.08),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: DateTimeField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                            new Radius.circular(10.0),
-                                          ),
-                                        ),
-                                      ),
-                                      resetIcon: null,
-                                      format: format,
-                                      onEditingComplete: () {
-                                        setState(() {
-                                          appointmentTime = DateTime.now();
-                                        });
-                                      },
-                                      onShowPicker:
-                                          (context, currentValue) async {
-                                        final date = await showDatePicker(
-                                            context: context,
-                                            firstDate: DateTime(2020),
-                                            initialDate: currentValue!,
-                                            lastDate: DateTime(2500));
+              TextButton(
+                onPressed: () async {
+                  String uid = FirebaseAuth.instance.currentUser!.uid;
+                  String? fullName =
+                      FirebaseAuth.instance.currentUser!.displayName;
+                  String? email = FirebaseAuth.instance.currentUser!.email;
+                  var reservationObject = {
+                    "barbersName": this.widget.barberName,
+                    "client Name": fullName,
+                    "email": email,
+                    "startTime": _meeting.from,
+                    "endTime": _meeting.to,
+                    "uid": uid,
+                    "cost": this.widget.price,
+                    "reservation description": _meeting.eventName,
+                    "client token": deviceToken,
+                    "compoundKey": this.widget.barberName +
+                        _meeting.from.toString().trim(),
+                    "completed": false,
+                  };
 
-                                        if (date != null) {
-                                          final time = await showTimePicker(
-                                            context: context,
-                                            initialTime: TimeOfDay.fromDateTime(
-                                                currentValue),
-                                          );
-                                          return DateTimeField.combine(
-                                              date, time);
-                                        } else {
-                                          return currentValue;
-                                        }
-                                      },
-                                      autovalidateMode: AutovalidateMode.always,
-                                      // ignore: unnecessary_null_comparison
-                                      validator: (date) =>
-                                          date.toString() == null
-                                              ? 'Invalid date'
-                                              : null,
-                                      initialValue: initialValue,
-                                      onChanged: (date) => setState(() {
-                                        appointmentTime = date;
-                                      }),
-                                      onSaved: (date) => setState(
-                                        () {
-                                          appointmentTime = date;
-                                          savedCount++;
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 30.0),
-                                    child: button
-                                        ? Center(
-                                            child: CircularProgressIndicator())
-                                        : SizedBox(
-                                            height: size.height / 12,
-                                            width: size.width - 40,
-                                            child: MaterialButton(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              child: Text(
-                                                "Save Appointment",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'Arial'),
-                                              ),
-                                              onPressed: purchasePossible
-                                                  ? () async {
-                                                      if (_formKey.currentState!
-                                                          .validate()) {
-                                                        print(appointmentTime);
+                  FirebaseFirestore.instance
+                      .collection("Appointments")
+                      .doc(this.widget.barberName +
+                          _meeting.from.toString().trim())
+                      .update({"reserved by": fullName, "Email": email}).then(
+                          (value) {
+                    Fluttertoast.showToast(
+                      msg: "Your appointment date has been saved",
+                    );
+                  }).timeout(Duration(minutes: 2), onTimeout: () {
+                    setState(() {
+                      isloading = false;
+                      _showDialog2();
+                      print("error");
+                    });
+                  });
 
-                                                        var id =
-                                                            await getCurrentUID();
+                  FirebaseFirestore.instance
+                      .collection("Reserved Appointments")
+                      .doc(this.widget.barberName +
+                          _meeting.from.toString().trim())
+                      .set(reservationObject)
+                      .then((value) {
+                    Fluttertoast.showToast(
+                      msg: "Your appointment date has been saved",
+                    );
+                    Navigator.pop(context);
+                  }).timeout(Duration(minutes: 2), onTimeout: () {
+                    setState(() {
+                      isloading = false;
+                      _showDialog2();
+                      print("error");
+                    });
+                  });
+                  getDataFromFireStore();
+                },
+                child: Text("Reserve Time"),
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
 
-                                                        var date = FieldValue
-                                                            .serverTimestamp();
-                                                        if (appointmentTime ==
-                                                            null) {
-                                                          ScaffoldMessenger.of(
-                                                                  context)
-                                                              .showSnackBar(
-                                                                  errorDisplay(
-                                                                      "Please select a convenient time"));
-                                                        } else {
-                                                          var appointmentObject =
-                                                              {
-                                                            'Appointment Time':
-                                                                appointmentTime,
-                                                            'Barber name': this
-                                                                .widget
-                                                                .barberName,
-                                                            'Barber email': this
-                                                                .widget
-                                                                .barberEmail,
-                                                            'Service': this
-                                                                .widget
-                                                                .name,
-                                                            'Cost': this
-                                                                .widget
-                                                                .price,
-                                                            'Image of serice':
-                                                                this
-                                                                    .widget
-                                                                    .heroTag,
-                                                            'id': id,
-                                                            'date': date,
-                                                          };
-
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'Appointments')
-                                                              .add(
-                                                                  appointmentObject)
-                                                              .then((value) {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    successDisplay(
-                                                                        "Appointment Saved!"));
-
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushNamedAndRemoveUntil(
-                                                                    '/userHomePage',
-                                                                    (Route<dynamic>
-                                                                            route) =>
-                                                                        false);
-                                                          }).timeout(
-                                                                  Duration(
-                                                                      seconds:
-                                                                          5),
-                                                                  onTimeout:
-                                                                      () {
-                                                            setState(() {
-                                                              button = false;
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      errorDisplay(
-                                                                          "Failed to book appointment try again"));
-                                                              print("Error");
-                                                            });
-                                                          });
-                                                        }
-                                                      }
-                                                    }
-                                                  : () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (builder) {
-                                                            return AlertDialog(
-                                                              title: Text(
-                                                                  'No Allergies Provided'),
-                                                              content:
-                                                                  SingleChildScrollView(
-                                                                child: Text(
-                                                                    'An allergy report must be provided before any products can be purchased'),
-                                                              ),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed: () =>
-                                                                      Navigator.pop(
-                                                                          context),
-                                                                  child: Text(
-                                                                      'Cancel'),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                    Navigator.popAndPushNamed(
-                                                                        context,
-                                                                        '/allergies');
-                                                                  },
-                                                                  child: Text(
-                                                                      'Provide Report'),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          });
-                                                    },
-                                            ),
-                                          ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: size.height,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: size.height * 0.08),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipOval(
-                                child: Hero(
-                                  tag: this.widget.heroTag,
-                                  child: Image(
-                                    image: NetworkImage(
-                                      this.widget.heroTag,
-                                    ),
-                                    loadingBuilder: (context, child, progress) {
-                                      return progress == null
-                                          ? child
-                                          : CircularProgressIndicator();
-                                    },
-                                    errorBuilder: (BuildContext context,
-                                        Object exception,
-                                        StackTrace? stackTrace) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(18.0),
-                                        child:
-                                            Icon(Icons.broken_image_outlined),
-                                      );
-                                    },
-                                    fit: BoxFit.cover,
-                                    height: 150.0,
-                                    width: 150.0,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: size.height * 0.08),
-                          Row(
-                            children: [
-                              Text('Barber Name: '),
-                              Text(
-                                '${this.widget.barberName}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text('Barber Email: '),
-                              Text(
-                                '${this.widget.barberEmail}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text('Service: '),
-                              Text(
-                                '${this.widget.name}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text('Cost: '),
-                              Text(
-                                '${this.widget.price}',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              if (appointmentTime == null) ...[
-                                Text('Appointment Time: '),
-                                Text(''),
-                              ] else ...[
-                                Text('Appointment Time: '),
-                                Text(
-                                  '$appointmentTime',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ]
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+  void _showDialog2() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Appointment Date Saved"),
+          content: Wrap(
+            children: [
+              Text("Network Connection is not stable, your appointment"
+                  " will still be saved when you reconnect to a stable"
+                  " network connection")
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text("Ok"),
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
+}
+
+class MeetingDataSource extends CalendarDataSource {
+  MeetingDataSource(List<Meeting> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments![index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments![index].to;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments![index].isAllDay;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments![index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments![index].background;
+  }
+}
+
+class Meeting {
+  String? eventName;
+  DateTime? from;
+  DateTime to;
+  Color? background;
+  bool? isAllDay;
+
+  Meeting(
+      {this.eventName,
+      this.from,
+      required this.to,
+      this.background,
+      this.isAllDay});
 }

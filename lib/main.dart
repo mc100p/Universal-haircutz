@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universalhaircutz/pages/adminPanel/AdminHomePage.dart';
+import 'package:universalhaircutz/adminPanel/AdminHomePage.dart';
 import 'package:universalhaircutz/pages/Welcome.dart';
 import 'package:universalhaircutz/pages/homepage/homepage.dart';
 import 'package:universalhaircutz/utils/provider.dart';
@@ -92,9 +92,6 @@ class MyApp extends StatelessWidget {
           title: title,
           initialRoute: "/",
           onGenerateRoute: RouteGenerator.generateRoute,
-          // theme: ThemeData(
-          //   primaryColor: Color(0xFFFC9900),
-          // ),
           home: getState(login),
           themeMode: themeProvider.themeMode,
           theme: MyThemes.lightTheme,
@@ -106,9 +103,9 @@ class MyApp extends StatelessWidget {
 
   Widget getState(value) {
     if (login != null) {
-      if (role == "Userside") {
+      if (role == "User") {
         value = Pages();
-      } else if (role == "Adminside") {
+      } else if (role == "Admin") {
         value = AdminHomePage();
       }
     } else {
